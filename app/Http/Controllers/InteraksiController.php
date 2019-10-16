@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Interaksi;
+use DB;
+use Auth;
+use session;
+use URL;
 
 class InteraksiController extends Controller
 {
@@ -13,7 +18,7 @@ class InteraksiController extends Controller
      */
     public function index()
     {
-        //
+        return view('interaksi.index');
     }
 
     /**
