@@ -1,17 +1,24 @@
 @extends('layouts.app')
-	@section('title')
-		<div class="page-header-content header-elements-md-inline">
-			<div class="page-title d-flex">
-				<h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Interaksi</span> - Dashboard</h4>
-				<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+	
+	@section('content')
+	{{-- start breadcrumb --}}
+		<div class="card">
+			<div class="card-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Interaksi</span> - Dashboard</h4>
+					</div>
+				</div>
+				<div class="breadcrumb page-header-content">
+					<a href="#" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Interaksi</a>
+				</div>
 			</div>
 		</div>
-	@endsection
+	{{-- end breadcrumb --}}
 
-	@section('content')
 		<div class="card">
 	        <div class="card-header">
-	        	<a class="btn btn-primary" href="{{URL::to('/interaksi')}}">Tambah interaksi baru</a>
+	        	<a class="btn btn-primary" href="{{URL::to('/interaksi/create')}}">Tambah interaksi baru</a>
 	        </div>
 	        <div class="card-body">
 	            <div class="table-responsive">
@@ -52,8 +59,8 @@
                 "order": ['0', 'desc'],
                 "dataSrc": "data",
                 "columns": [
-                    {data: 'obat_id', name: 'obat_id'},
-                    {data: 'name', name: 'name'},
+                    {data: 'interaksi_id', name: 'interaksi_id'},
+                    {data: 'interaksi_name', name: 'interaksi_name'},
                     {data: 'added_by',name:'added_by'},
                     {data: 'created_at',name:'created_at'},
                     {data: 'action', name: 'action', "orderable": false, "searchable": false}

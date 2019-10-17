@@ -1,14 +1,23 @@
 @extends('layouts.app')
-	@section('title')
-		<div class="page-header-content header-elements-md-inline">
-			<div class="page-title d-flex">
-				<h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Oat</span> - Dashboard</h4>
-				<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
-			</div>
-		</div>
-	@endsection
 
 	@section('content')
+		{{-- start breadcrumb --}}
+		<div class="card">
+			<div class="card-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Obat</span> - Dashboard</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+					</div>
+				</div>
+				<div class="breadcrumb page-header-content">
+					<a href="index.html" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
+					<span class="breadcrumb-item active">Dashboard</span>
+				</div>
+			</div>
+		</div>
+		{{-- end breadcrumb --}}
+
 		<div class="card">
 	        <div class="card-header">
 	        	<a class="btn btn-primary" href="{{URL::to('/obat')}}">Tambah obat baru</a>

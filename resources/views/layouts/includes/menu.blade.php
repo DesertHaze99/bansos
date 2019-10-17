@@ -67,10 +67,10 @@
 							</span>
 						</a>
 					</li>
-					<li class="nav-item nav-item-submenu">
+					<li class="nav-item">
 						<a href="{{ URL::to('/obat') }}" class="nav-link"><span>Obat</span></a>
 					</li>
-					<li class="nav-item nav-item-submenu">
+					<li class="nav-item">
 						<a href="{{ URL::to('/interaksi') }}" class="nav-link"><span>Interaksi</span></a>
 					</li>
 					<li class="nav-item nav-item-submenu">

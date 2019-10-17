@@ -13,12 +13,10 @@
 	@include('layouts.includes.navbar')
 	<!-- /main navbar -->
 
-
 	<!-- Page header -->
-	@include('layouts.includes.breadcrumb')
+	{{-- @include('layouts.includes.breadcrumb') --}}
 	<!-- /page header -->
 		
-
 	<!-- Page content -->
 	<div class="page-content pt-0">
 
