@@ -11,12 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.app');
-});
+Route::get('/','DashboardController@index');
 
 Route::resource('obat','ObatController');
 Route::get('/obatAjax','ObatController@obatAjax');
 
 Route::resource('interaksi', 'InteraksiController');
 Route::get('/interaksiAjax','InteraksiController@InteraksiAjax');
+
+Auth::routes();
+

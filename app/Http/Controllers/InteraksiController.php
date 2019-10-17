@@ -21,6 +21,25 @@ class InteraksiController extends Controller
         return view('interaksi.index');
     }
 
+    public function interaksiAjax()
+    {
+        $data = Interaksi::all();
+
+        return datatables()->of($data)
+        ->addColumn('action',function($data){
+            $button = '';
+            $button .= '<form id="myform" method="post" action="'.route('interaksi.destroy',$data->interaksi_id).'">
+                            '.csrf_field().'
+                            <a href="' .URL::to('/interaksi/' . $data->interaksi_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                            <input name="_method" type="hidden" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                        </form>';
+            return $button;
+        })
+        ->removeColumn('updated_at')
+        ->make(true);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,7 +47,7 @@ class InteraksiController extends Controller
      */
     public function create()
     {
-        //
+        return view('interaksi.create');
     }
 
     /**
@@ -39,7 +58,22 @@ class InteraksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'interaksiName' => 'required|string'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $interaksi = new Interaksi;
+            $interaksi->interaksi_name = $request->interaksiName;
+            $interaksi->save();
+            DB::commit();
+
+            return redirect()->route('interaksi.index')->with('success','interaksi berhasi ditambahkan');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('interaksi.create')->with('error','Ada yang salah dengan sistem, hubungi pengembang');
+        }
     }
 
     /**
@@ -61,7 +95,8 @@ class InteraksiController extends Controller
      */
     public function edit($id)
     {
-        //
+        $interaksi = Interaksi::findOrFail($id);
+        return view('interaksi.edit',compact('interaksi'));
     }
 
     /**
@@ -73,7 +108,20 @@ class InteraksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'interaksiName' => 'required|string'
+        ]);
+
+        try {
+            $interaksi = Interaksi::findOrFail($id);
+            $interaksi->interaksi_name = $request->interaksiName;
+            $interaksi->save(); 
+            DB::commit();
+            return redirect()->route('interaksi.index')->with('success','interaksi berhasi diubah');   
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('interaksi.edit',$id)->with('error','Ada yang salah dengan sistem, hubungi pengembang');
+        }
     }
 
     /**
@@ -84,6 +132,15 @@ class InteraksiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $interaksi = Interaksi::findOrFail($id);
+            $interaksi->delete();
+            DB::commit();
+            return redirect()->route('interaksi.index')->with('success','interaksi berhasi dihapus');   
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('interaksi.index')->with('error','Ada yang salah dengan sistem, hubungi pengembang');
+        }
     }
 }
