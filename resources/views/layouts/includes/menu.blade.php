@@ -74,6 +74,15 @@
 						<a href="{{ URL::to('/interaksi') }}" class="nav-link"><span>Interaksi</span></a>
 					</li>
 					<li class="nav-item nav-item-submenu">
+						<a href="{{ URL::to('/bentukObat') }}" class="nav-link"><span>Bentuk Obat</span></a>
+					</li>
+					<li class="nav-item nav-item-submenu">
+						<a href="{{ URL::to('/merkDagang') }}" class="nav-link"><span>Merk Dagang Obat</span></a>
+					</li>
+					<li class="nav-item nav-item-submenu">
+						<a href="{{ URL::to('/dosis') }}" class="nav-link"><span>Dosis Obat</span></a>
+					</li>
+					<li class="nav-item nav-item-submenu">
 						<a href="#" class="nav-link"><span>Starter kit</span></a>
 					</li>
 					<!-- /main -->

@@ -21,3 +21,11 @@ Route::get('/interaksiAjax','InteraksiController@InteraksiAjax');
 
 Auth::routes();
 
+Route::resource('bentukObat','BentukObatController');
+Route::get('/bentukObatAjax','BentukObatController@bentukObatAjax');
+
+Route::resource('merkDagang','MerkDagangController');
+Route::get('/merekDagangAjax','MerkDagangController@merekDagangAjax');
+
+Route::resource('dosis','DosisController');
+Route::get('/dosisAjax','DosisController@dosisAjax');

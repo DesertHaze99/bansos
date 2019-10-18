@@ -5,14 +5,14 @@
 	<div class="card page-header page-header-light">
 		    <div class="page-header-content header-elements-md-inline">
 		        <div class="page-title">
-		            <h2><span class="font-weight-semibold mx-2">APOTECH</span> - Ubah Interaksi</h2>
+		            <h2><span class="font-weight-semibold mx-2">APOTECH</span> - Ubah bentuk obat</h2>
 		            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
 		        </div>
 		    </div>
 		    <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
 			    <div class="d-flex">
 			        <div class="breadcrumb">
-			            <a href="{{ URL::to('/interaksi')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>Interaksi</a>
+			            <a href="{{ URL::to('/bentukObat')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>Bentuk obat</a>
 			            <span class="breadcrumb-item active">Edit</span>
 			        </div>
 			        <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
@@ -23,7 +23,7 @@
 	
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Interaksi</h5>
+			<h5 class="card-title">Bentuk Obat</h5>
 			<div class="header-elements">
 				<div class="list-icons">
             		<a class="list-icons-item" data-action="collapse"></a>
@@ -34,15 +34,15 @@
 		</div>
 
 		<div class="card-body">
-			<form action="{{ route('interaksi.update',$interaksi->interaksi_id) }}" method="post" enctype="multipart/form-data">
+			<form action="{{ route('bentukObat.update',$bentukObat->bentuk_obat_id) }}" method="post" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ method_field('PUT') }}
 				<div class="form-group">
-					<label>Interaksi name:</label>
-					<input type="text" class="form-control" value="{{ $interaksi->interaksi_name }}" placeholder="Silahkan masukan interaksi yang dinginkan" name="interaksiName">
+					<label>Bentuk :</label>
+					<input type="text" class="form-control" value="{{ $bentukObat->bentuk }}" placeholder="Silahkan masukan bentuk obat" name="bentukObatName">
 				</div>
 				<div class="text-right">
-					<button class="btn btn-warning" action="{{ URL::to('/interaksi') }}">Back</button>
+					<button class="btn btn-warning" action="{{ URL::to('/bentukObat') }}">Back</button>
 					<button type="submit" class="btn btn-primary">Submit<i class="icon-paperplane ml-2"></i></button>
 				</div>
 			</form>
