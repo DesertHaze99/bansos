@@ -67,6 +67,15 @@
 							</span>
 						</a>
 					</li>
+					<br>
+					<li class="nav-item">
+						<a href="#" class="nav-link active">
+							<i class="icon-eyedropper2"></i>
+							<span>
+								<span class="d-block font-weight-normal opacity-50">Menu infromasi obat</span>
+							</span>
+						</a>
+					</li>
 					<li class="nav-item">
 						<a href="{{ URL::to('/obat') }}" class="nav-link"><span>Obat</span></a>
 					</li>
@@ -81,6 +90,21 @@
 					</li>
 					<li class="nav-item nav-item-submenu">
 						<a href="{{ URL::to('/dosis') }}" class="nav-link"><span>Dosis Obat</span></a>
+					</li>
+					<li class="nav-item nav-item-submenu">
+						<a href="{{ URL::to('/kontraindikasi') }}" class="nav-link"><span>Kontraindikasi</span></a>
+					</li>
+					<br>
+					<li class="nav-item">
+						<a href="#" class="nav-link active">
+							<i class="icon-height"></i>
+							<span>
+								<span class="d-block font-weight-normal opacity-50">Menu pasien dan resep</span>
+							</span>
+						</a>
+					</li>
+					<li class="nav-item nav-item-submenu">
+						<a href="{{ URL::to('/pasien') }}" class="nav-link"><span>Pasien</span></a>
 					</li>
 					<li class="nav-item nav-item-submenu">
 						<a href="#" class="nav-link"><span>Starter kit</span></a>

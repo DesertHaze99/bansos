@@ -29,3 +29,9 @@ Route::get('/merekDagangAjax','MerkDagangController@merekDagangAjax');
 
 Route::resource('dosis','DosisController');
 Route::get('/dosisAjax','DosisController@dosisAjax');
+
+Route::resource('kontraindikasi','KontraindikasiController');
+Route::get('/kontraindikasiAjax','KontraindikasiController@kontraindikasiAjax');
+
+Route::resource('pasien','PasienController');
+Route::get('/pasienAjax','PasienController@pasienAjax');
