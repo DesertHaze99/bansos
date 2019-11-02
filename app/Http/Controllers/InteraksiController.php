@@ -11,6 +11,11 @@ use URL;
 
 class InteraksiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -112,6 +117,7 @@ class InteraksiController extends Controller
             'interaksiName' => 'required|string'
         ]);
 
+        DB::beginTransaction();
         try {
             $interaksi = Interaksi::findOrFail($id);
             $interaksi->interaksi_name = $request->interaksiName;

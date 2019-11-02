@@ -1,6 +1,27 @@
 @extends('layouts.app')
 
 	@section('content')
+
+		@if (session('success'))
+	        <div class="box-body">
+	            <div class="alert alert-success alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Success!</h4>
+	                    {{ session('success') }}
+	            </div>
+	        </div>
+	    @endif
+
+	    @if (session('error'))
+	        <div class="box-body">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+	                    {{ session('error') }}
+	            </div>
+	        </div>
+	    @endif
+
 		{{-- start breadcrumb --}}
 		<div class="card">
 			<div class="card-header">
@@ -20,7 +41,7 @@
 
 		<div class="card">
 	        <div class="card-header">
-	        	<a class="btn btn-primary" href="{{URL::to('/obat')}}">Tambah obat baru</a>
+	        	<a class="btn btn-primary" href="{{URL::to('/obat/create')}}">Tambah obat baru</a>
 	        </div>
 	        <div class="card-body">
 	            <div class="table-responsive">
@@ -31,7 +52,6 @@
 	                                ID
 	                            </th>
 	                            <th>Nama Obat</th>
-	                            <th>Ditambahkan oleh</th>
 	                            <th>Ditambahkan pada</th>
 	                            <th width="30%">Action</th>
 	                        </tr>
@@ -63,7 +83,6 @@
                 "columns": [
                     {data: 'obat_id', name: 'obat_id'},
                     {data: 'name', name: 'name'},
-                    {data: 'added_by',name:'added_by'},
                     {data: 'created_at',name:'created_at'},
                     {data: 'action', name: 'action', "orderable": false, "searchable": false}
                 ],

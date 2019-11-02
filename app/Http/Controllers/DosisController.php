@@ -11,10 +11,10 @@ use App\Dosis;
 
 class DosisController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     /**
      * Display a listing of the resource.
@@ -90,6 +90,7 @@ class DosisController extends Controller
             'dosisValue' => 'required'
         ]);
 
+        DB::beginTransaction();
         try {
             $dosis = Dosis::findOrFail($id);
             $dosis->obat_id = $request->obat;
@@ -105,6 +106,7 @@ class DosisController extends Controller
 
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $dosis = Dosis::findOrFail($id);
             $dosis->delete();
