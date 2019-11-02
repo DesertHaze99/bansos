@@ -66,6 +66,7 @@
                 "order": ['0', 'desc'],
                 "dataSrc": "data",
                 "columns": [
+                    {data: 'no_rm',name: 'no_rm'},
                     {data: 'nama', name: 'nama'},
                     {data: 'jenis_kelamin', name: 'jenis_kelamin'},
                     {data: 'tanggal_lahir', name: 'tanggal_lahir'},

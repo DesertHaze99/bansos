@@ -6,14 +6,21 @@ use Illuminate\Http\Request;
 use DB;
 use URL;
 use session;
+use App\BentukObat;
 use App\Obat;
+use App\Kontraindikasi;
+use App\Interaksi;
+use App\DetailObat;
+use App\KontraindikasiMapping;
+use App\InteraksiMapping;
+use Image;
 
 class ObatController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     /**
      * Display a listing of the resource.
@@ -29,12 +36,7 @@ class ObatController extends Controller
     public function obatAjax()
     {
         $data = Obat::all();
-        		// with(['detailObat','kategoriMapping' => function($query){
-          //         $query->with('kategori');
-          //       }])
-          //       ->orderBy('obat_id','desc')
-          //       ->get();
-        // return $data[0]->kategoriMapping[0]->kategori_name;
+
         $listKategori ='';
         // return $data;
         return datatables()->of($data)
@@ -49,27 +51,7 @@ class ObatController extends Controller
                             </form>';
                 return $button;
             })
-            // ->addColumn('kategori',function($data) use($listKategori){
-            //   for ($i=0; $i <count($data->kategoriMapping) ; $i++) { 
-            //       $listKategori .= '<li>'.$data->kategoriMapping[$i]->kategori->kategori_name.'</li>';
-            //   }
-            //   $list = '<ul>'.$listKategori.'</ul>';
-            //   return $list;
-            // })
-            // ->addColumn('kadaluarsa',function($data){
-            //     return $data->detailObat->kadaluarsa;
-            // })
-            // ->addColumn('efek_samping',function($data){
-            //     return $data->detailObat->efek_samping;
-            // })
-            // ->addColumn('pola_makan',function($data){
-            //     return$data->detailObat->pola_makan;
-            // })
-            // ->editColumn('obat_image',function($data){
-            //     return '<img src="'.$data->detailObat->obat_image.'" >';
-            // })
-            // ->rawColumns(['action','obat_image','kategori'])
-            ->removeColumn('updated_at')
+            ->removeColumn('updated_at','added_by')
             ->make(true);
     }
 
@@ -80,8 +62,17 @@ class ObatController extends Controller
      */
     public function create()
     {
-        $kategori = Kategori::all();
-        return view('obat.create',compact('kategori'));
+        $satuan = [
+            0 => 'ml',
+            1 => 'mg',
+        ];
+        $bentukObat = BentukObat::All();
+        // return $bentukObat;
+        $kontraindikasi = Kontraindikasi::all();
+        // return $kontraindikasi;
+        $interaksi = Interaksi::all();
+        // return $interaksi;
+        return view('obat.create',compact('satuan','bentukObat','interaksi','kontraindikasi'));
     }
 
     /**
@@ -92,59 +83,69 @@ class ObatController extends Controller
      */
     public function store(Request $request)
     {
-
-        // return dd($request->all());
         // return $request->all();
         $this->validate($request,[
-            'obatName' => 'required',
-            'obatImage' => 'required|file',
-            'kadaluarsa' => 'required',
-            'efekSamping' => 'required',
-            'polaMakan' => 'required',
-            'penyimpanan' => 'required',
-            'obatKategori' => 'required',
-        ]);
-
-        // return $request['obatKategori'][1];
+          'nama' => 'required|string',
+          'bentuk' => 'required',
+          'kesediaan' => 'required',
+          'satuan' => 'required|string',
+          'kontraindikasi' => 'required|array',
+          'interaksi' => 'required|array',
+          'efekSamping' => 'required|string',
+          'petunjukPenyimpanan' => 'required|string',
+          'polaMakan' => 'required',
+          'deskripsi' =>'required',
+          'gambarObat' => 'required|file|mimes:jpg,png'
+         ]);
 
         DB::beginTransaction();
-        try{
-            $originalImage = $request['obatImage'];
-            $fileName =time().'_'.uniqid().'_'.$originalImage->getClientOriginalName();
-            $image  = Image::make($originalImage);
-            $path = public_path().'/upload/img/';
-            $image->resize(150,150);
-            $image->save($path.$fileName);
+        try {
+          $file = $request->file('gambarObat');
+          $fileName = time().'_' .uniqid().'.'. $file->getClientOriginalExtension();
+          $thumbnailPath = public_path().'/upload/image/';
+          $img = Image::make($file)->resize(300,150, function($constraint){
+            $constraint->aspectRatio();
+          });
+          $img->save($thumbnailPath.$fileName);
 
-            $obat = new obat;
-            $obat->name = $request['obatName'];
-            $obat->added_by = Auth::user()->id;
-            $obat->save();
-            $obatId = $obat->obat_id;
+          $obat = new Obat;
+          $obat->name = $request->nama;
+          $obat->save();
 
-            $detailObat = new DetailObat;
-            $detailObat->obat_id = $obatId;
-            $detailObat->kadaluarsa = $request['kadaluarsa'];
-            $detailObat->obat_image = '/upload/img/'.$fileName;
-            $detailObat->efek_samping = $request['efekSamping'];
-            $detailObat->pola_makan = $request['polaMakan'];
-            $detailObat->penyimpanan = $request['penyimpanan'];
-            $detailObat->obat_description = $request['obatDeskripsi'];
-            $detailObat->save();
+          $obatId = $obat->obat_id;
+          $detailObat = new DetailObat;
+          $detailObat->obat_id = $obatId;
+          $detailObat->obat_image = 'upload/image/'.$fileName;
+          $detailObat->bentuk_obat = $request->bentuk;
+          $detailObat->kesediaan = $request->kesediaan;
+          $detailObat->satuan = $request->satuan;
+          $detailObat->efek_samping = $request->efekSamping;
+          $detailObat->pola_makan = $request->polaMakan;
+          $detailObat->penyimpanan = $request->petunjukPenyimpanan;
+          $detailObat->obat_description = $request->deskripsi;
+          $detailObat->save();
 
-            for ($i=0; $i < count($request['obatKategori']); $i++) { 
-              $KategoriMapping = new KategoriMapping;
-              $KategoriMapping->obat_id = $obatId;
-              $KategoriMapping->kategori_id = $request['obatKategori'][$i];
-              $KategoriMapping->save();
-            }
+          for ($i=0; $i < count($request->kontraindikasi); $i++) { 
+            $kontraindikasiMapping = new KontraindikasiMapping;
+            $kontraindikasiMapping->obat_id = $obatId;
+            $kontraindikasiMapping->kontraindikasi_id = $request['kontraindikasi'][$i];
+            $kontraindikasiMapping->save();
+          }
 
-            DB::commit();
-            return redirect()->route('obat.index')->with('success','Obat berhasil ditambahkan');
-        }catch(\Exception $e){
-            DB::rollback();
-            return redirect()->route('obat.create')->with('error','Ada yang tidak beres silahkan hubungi pengembang');
+          for ($i=0; $i < count($request->interaksi); $i++) { 
+            $interaksiMapping = new InteraksiMapping;
+            $interaksiMapping->obat_id = $obatId;
+            $interaksiMapping->interaksi_id = $request['interaksi'][$i];
+            $interaksiMapping->save();
+          }
+
+          DB::commit();
+          return redirect()->route('obat.index')->with('success','Obat berhasil ditambahkan');
+        } catch (Exception $e) {
+          DB::rollback();
+          return redirect()->route('obat.index')->with('error','Ada sesuatu yang tidak beres silahkan hubungi pengembang');
         }
+
     }
 
     /**
@@ -166,19 +167,47 @@ class ObatController extends Controller
      */
     public function edit($id)
     {
-        $obat = Obat::with('detailObat','kategoriMapping')
+        $dataKontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id)->get();
+        $dataInteraksiMapping = InteraksiMapping::where('obat_id',$id)->get();
+        $kontraindikasiMapping = [];
+        $interaksiMapping = [];
+
+        $obat = Obat::with(
+                ['detailObat'=>function($query){
+                  $query->with('bentukObat');
+                },
+                  'kontraindikasiMapping' => function($query){
+                    $query->with('kontraindikasi');
+                  },
+                  'interaksiMapping' => function($query){
+                    $query->with('interaksi');
+                  }
+                ])
                 ->where('obat_id',$id)
                 ->first();
-        $dataKategoriMapping = KategoriMapping::with('kategori')
-                          ->where('obat_id',$id)->get();
-        $kategoriMapping = [];
-        for ($i=0; $i < count($dataKategoriMapping) ; $i++) { 
-          array_push($kategoriMapping, $dataKategoriMapping[$i]->kategori_id);
+        // return $obat;
+
+        for ($i=0; $i < count($dataKontraindikasiMapping); $i++) { 
+          array_push($kontraindikasiMapping,$dataKontraindikasiMapping[$i]->kontraindikasi_id);
         }
-        $kategori = Kategori::all();
+
+        
+        for ($i=0; $i < count($dataInteraksiMapping); $i++) { 
+          array_push($interaksiMapping,$dataInteraksiMapping[$i]->interaksi_id);
+        }
+        // return $interaksiMapping;
+        
+        $kontraindikasi = Kontraindikasi::all();
+        // return $kontraindikasi;
+        $interaksi = Interaksi::all();
+        $bentukObat = BentukObat::all();
+        $satuan = [
+            0 => 'ml',
+            1 => 'mg',
+        ];
 
         // return $obat;
-        return view('obat.edit',compact('obat','kategoriMapping','kategori'));
+        return view('obat.edit',compact('obat','kontraindikasi','interaksi','bentukObat','satuan','kontraindikasiMapping','interaksiMapping'));
     }
 
     /**
@@ -190,65 +219,90 @@ class ObatController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return $request->all();
         // return $request['obatKategori'];
-         $this->validate($request,[
-            'obatName' => 'required',
-            'obatImage' => 'required|file',
-            'obatKategori' => 'required',
-            'kadaluarsa' => 'required',
-            'efekSamping' => 'required',
-            'polaMakan' => 'required',
-            'penyimpanan' => 'required'
-        ]);
+        $this->validate($request,[
+          'nama' => 'required|string',
+          'bentuk' => 'required',
+          'kesediaan' => 'required',
+          'satuan' => 'required|string',
+          'kontraindikasi' => 'required|array',
+          'interaksi' => 'required|array',
+          'efekSamping' => 'required|string',
+          'petunjukPenyimpanan' => 'required|string',
+          'polaMakan' => 'required',
+          'deskripsi' =>'required',
+          'gambarObat' => 'file|mimes:jpg,png'
+         ]);
 
-        $dataKategoriMapping = KategoriMapping::where('obat_id',$id)->get();
+        $dataKontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id)->get();
+        $kontraindikasiMapping = [];
+        for ($i=0; $i < count($dataKontraindikasiMapping) ; $i++) { 
+          array_push($kontraindikasiMapping, $dataKontraindikasiMapping[$i]->kontraindikasi_id);
+        }
 
-// return $dataKategoriMapping[1]->kategori_id;
-        $kategoriMapping = [];
-        for ($i=0; $i < count($dataKategoriMapping) ; $i++) { 
-          array_push($kategoriMapping, $dataKategoriMapping[$i]->kategori_id);
+        $dataInteraksiMapping = InteraksiMapping::where('obat_id',$id)->get();
+        $interaksiMapping = [];
+        for ($i=0; $i < count($dataInteraksiMapping) ; $i++) { 
+          array_push($interaksiMapping, $dataInteraksiMapping[$i]->kontraindikasi_id);
         }
 
         DB::beginTransaction();
         try{
-            $data = DetailObat::where('obat_id',$id)->first();
-            $img = $data->obat_image;
-            File::delete($img);
+            if ($request->hasFile('gambarObat')) {
+              $file = $request->file('gambarObat');
+              $fileName = time().'_' .uniqid().'.'. $file->getClientOriginalExtension();
+              $thumbnailPath = public_path().'/upload/image/';
+              $img = Image::make($file)->resize(300,150, function($constraint){
+                $constraint->aspectRatio();
+              });
+              $img->save($thumbnailPath.$fileName);
+            }
 
-            $originalImage = $request['obatImage'];
-            $fileName =time().'_'.uniqid().'_'.$originalImage->getClientOriginalName();
-            $image  = Image::make($originalImage);
-            $path = public_path().'/upload/img/';
-            $image->resize(150,150);
-            $image->save($path.$fileName);
-
-            $obat = Obat::where('obat_id',$id)->first();
-            $obat->name = $request['obatName'];
+            $obat = Obat::findOrFail($id);
+            $obat->name = $request->nama;
             $obat->save();
-            $obatId = $obat->obat_id;
 
             $detailObat = DetailObat::where('obat_id',$id)->first();
-            $detailObat->obat_id = $obatId;
-            $detailObat->obat_image = '/upload/img/'.$fileName;
-            $detailObat->kadaluarsa = $request['kadaluarsa'];
-            $detailObat->efek_samping = $request['efekSamping'];
-            $detailObat->pola_makan = $request['polaMakan'];
-            $detailObat->penyimpanan = $request['penyimpanan'];
+            // $detailObat->obat_image = 'upload/image/'.$fileName;
+            $detailObat->bentuk_obat = $request->bentuk;
+            $detailObat->kesediaan = $request->kesediaan;
+            $detailObat->satuan = $request->satuan;
+            $detailObat->efek_samping = $request->efekSamping;
+            $detailObat->pola_makan = $request->polaMakan;
+            $detailObat->penyimpanan = $request->petunjukPenyimpanan;
+            $detailObat->obat_description = $request->deskripsi;
             $detailObat->save();
 
-            for ($i=0; $i < count($request['obatKategori']); $i++) { 
-              if(!in_array($request['obatKategori'][$i],$kategoriMapping)){
-                $mappingKategori = new KategoriMapping;
-                $mappingKategori->obat_id = $obatId;
-                $mappingKategori->kategori_id = $request['obatKategori'][$i];
-                $mappingKategori->save();
+            for ($i=0; $i < count($request['kontraindikasi']); $i++) { 
+              if(!in_array($request['kontraindikasi'][$i],$kontraindikasiMapping)){
+                $kontraindikasiMapping = new kontraindikasiMapping;
+                $kontraindikasiMapping->obat_id = $id;
+                $kontraindikasiMapping->kontraindikasi_id = $request['kontraindikasi'][$i];
+                $kontraindikasiMapping->save();
               }
             }
 
-            for ($i=0; $i < count($dataKategoriMapping) ; $i++) { 
-              if (!in_array($dataKategoriMapping[$i]->kategori_id,$request['obatKategori'])) {
-                $mappingKategori = KategoriMapping::where('kategori_id',$dataKategoriMapping[$i]->kategori_id);
-                $mappingKategori->delete();
+            for ($i=0; $i < count($dataKontraindikasiMapping) ; $i++) { 
+              if (!in_array($dataKontraindikasiMapping[$i]->kontraindikasi_id,$request['kontraindikasi'])) {
+                $kontraindikasiMapping = kontraindikasiMapping::where('kontraindikasi_id',$dataKontraindikasiMapping[$i]->kontraindikasi_id);
+                $kontraindikasiMapping->delete();
+              }
+            }
+
+            for ($i=0; $i < count($request['interaksi']); $i++) { 
+              if (!in_array($request['interaksi'][$i],$interaksiMapping)) {
+                $interaksiMapping = new InteraksiMapping;
+                $interaksiMapping->obat_id = $id;
+                $interaksiMapping->interaksi_id = $request['interaksi'][$i];
+                $interaksiMapping->save();
+              }
+            }
+
+            for ($i=0; $i < count($dataInteraksiMapping) ; $i++) { 
+              if (!in_array($dataInteraksiMapping[$i]->interaksi_id,$request['interaksi'])) {
+                $interaksiMapping = InteraksiMapping::where('interaksi_id',$dataInteraksiMapping[$i]->interaksi_id);
+                $interaksiMapping->delete();
               }
             }
 
@@ -268,57 +322,62 @@ class ObatController extends Controller
      */
     public function destroy($id)
     {
-        DB::beginTransaction();
-        try{
-          $obat = obat::where('obat_id',$id);
+        // DB::beginTransaction();
+        // try{
+          $obat = obat::findOrFail($id);
           $obat->delete();
 
           $detailObat = DetailObat::where('obat_id',$id);
           $detailObat->delete();
 
-          $interaksiObat = InteraksiObat::where('obat_id',$id)->get();
-          for ($i=0; $i < count($interaksiObat) ; $i++) { 
+          $interaksiMapping = InteraksiMapping::where('obat_id',$id);
+          for ($i=0; $i < count($interaksiMapping) ; $i++) { 
               $interaksiObat[$i]->delete();
           }
 
-          DB::commit();
+          $kontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id);
+          for ($i=0; $i < count($kontraindikasiMapping) ; $i++) { 
+              $kontraindikasiMapping[$i]->delete();
+          }
+
+          // DB::commit();
           return redirect()->route('obat.index')->with('success','Obat deleted successfully');
-        }catch(\Exception $e){
-          DB::rollback();
-          return redirect()->route('obat.index')->with('error','Ada yang tidak beres silahkan hubungi pengembang');
-        }
+        // }catch(\Exception $e){
+        //   DB::rollback();
+        //   return redirect()->route('obat.index')->with('error','Ada yang tidak beres silahkan hubungi pengembang');
+        // }
     }
 
-    public function modalDetail(Request $request)
-    {
-        $id = $request['id'];
-        $data = Obat::with('detailObat')
-                ->where('obat_id',$id)
-                ->first();
+    // public function modalDetail(Request $request)
+    // {
+    //     $id = $request['id'];
+    //     $data = Obat::with('detailObat')
+    //             ->where('obat_id',$id)
+    //             ->first();
 
-        $table = '';
-        $table =    '<table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Nama Obat</th>
-                          <th scope="col">Kadaluarsa</th>
-                          <th scope="col">Efek samping</th>
-                          <th scope="col">Pola makan</th>
-                          <th scope="col">Penyimpanan</th>
-                          <th scope="col">Deskripsi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>'.$data->name.'</th>
-                          <td>'.$data->detailObat->kadaluarsa.'</td>
-                          <td>'.$data->detailObat->efek_samping.'</td>
-                          <td>'.$data->detailObat->pola_makan.'x sehari</td>
-                          <td>'.$data->detailObat->penyimpanan.'</td>
-                          <td>'.$data->detailObat->obat_description.'</td>
-                        </tr>
-                      </tbody>
-                    </table>';
-        return $table;
-    }
+    //     $table = '';
+    //     $table =    '<table class="table">
+    //                   <thead>
+    //                     <tr>
+    //                       <th scope="col">Nama Obat</th>
+    //                       <th scope="col">Kadaluarsa</th>
+    //                       <th scope="col">Efek samping</th>
+    //                       <th scope="col">Pola makan</th>
+    //                       <th scope="col">Penyimpanan</th>
+    //                       <th scope="col">Deskripsi</th>
+    //                     </tr>
+    //                   </thead>
+    //                   <tbody>
+    //                     <tr>
+    //                       <td>'.$data->name.'</th>
+    //                       <td>'.$data->detailObat->kadaluarsa.'</td>
+    //                       <td>'.$data->detailObat->efek_samping.'</td>
+    //                       <td>'.$data->detailObat->pola_makan.'x sehari</td>
+    //                       <td>'.$data->detailObat->penyimpanan.'</td>
+    //                       <td>'.$data->detailObat->obat_description.'</td>
+    //                     </tr>
+    //                   </tbody>
+    //                 </table>';
+    //     return $table;
+    // }
 }

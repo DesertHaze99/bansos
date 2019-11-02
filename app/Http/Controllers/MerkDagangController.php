@@ -11,10 +11,10 @@ use App\MerkDagang;
 
 class MerkDagangController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     /**
      * Display a listing of the resource.
@@ -90,6 +90,8 @@ class MerkDagangController extends Controller
         $this->validate($request,[
             'merkDagangName' => 'required'
         ]);
+
+        DB::beginTransaction();
         try {
             $merkDagang = MerkDagang::findOrFail($id);
             $merkDagang->obat_id = $request->obat;
@@ -104,7 +106,8 @@ class MerkDagangController extends Controller
     }
 
     public function destroy($id)
-    {
+    {   
+        DB::beginTransaction();
         try {
             $merkDagang = MerkDagang::findOrFail($id);
             $merkDagang->delete();

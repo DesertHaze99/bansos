@@ -35,16 +35,25 @@ class Obat extends Model
         'created_at'
     ];
 
-    // public function detailObat()
-    // {
-    // 	return $this->hasOne('App\DetailObat','obat_id','obat_id');
-    // }
+    public function detailObat()
+    {
+    	return $this->hasOne('App\DetailObat','obat_id','obat_id');
+    }
 
-    // public function interaksiObat()
-    // {
-    //     return $this->hasMany('App\InteraksiObat','obat_id','obat_id');
-    // }
+    public function interaksiMapping()
+    {
+        return $this->hasMany('App\InteraksiMapping','obat_id','obat_id');
+    }
 
+    public function kontraindikasiMapping()
+    {
+        return $this->hasMany('App\KontraindikasiMapping','obat_id','obat_id');
+    }
+
+    public function bentukObat()
+    {
+        return $this->hasOne('App\BentukObat','bentuk_obat_id','bentuk_obat');
+    }
     // public function kategoriMapping()
     // {
     //     return $this->hasMany('App\KategoriMapping','obat_id','obat_id');
