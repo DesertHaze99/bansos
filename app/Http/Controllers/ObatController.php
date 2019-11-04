@@ -331,14 +331,24 @@ class ObatController extends Controller
           $detailObat->delete();
 
           $interaksiMapping = InteraksiMapping::where('obat_id',$id);
-          for ($i=0; $i < count($interaksiMapping) ; $i++) { 
-              $interaksiObat[$i]->delete();
-          }
+          if (is_array($interaksiMapping)) {
+            for ($i=0; $i < count($interaksiMapping) ; $i++) { 
+              $interaksiMapping[$i]->delete();
+            }
 
-          $kontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id);
-          for ($i=0; $i < count($kontraindikasiMapping) ; $i++) { 
-              $kontraindikasiMapping[$i]->delete();
+          } else {
+            $interaksiMapping->delete();
           }
+          
+          $kontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id);
+          if (is_array($kontraindikasiMapping)) {
+            for ($i=0; $i < count($kontraindikasiMapping) ; $i++) { 
+              $kontraindikasiMapping[$i]->delete();
+            }
+          } else {
+            $kontraindikasiMapping->delete();
+          }
+          
 
           // DB::commit();
           return redirect()->route('obat.index')->with('success','Obat deleted successfully');

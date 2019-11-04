@@ -111,30 +111,7 @@
 					</li>
 					<!-- /main -->
 
-					<!-- Layout -->
-					<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Layout</div> <i class="icon-menu" title="Layout options"></i></li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-stack2"></i> <span>Page layouts</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-page-break2"></i> <span>Headers &amp; footers</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-indent-decrease2"></i> <span>Sidebars</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-menu3"></i> <span>Navbars</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-sort"></i> <span>Vertical navigation</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-transmission"></i> <span>Horizontal navigation</span></a>
-					</li>
-					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><i class="icon-tree5"></i> <span>Menu levels</span></a>
-					</li>
-					<!-- /layout -->
+					
 						
 				</ul>
 			</div>
