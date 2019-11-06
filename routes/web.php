@@ -15,6 +15,7 @@ Route::get('/','DashboardController@index');
 
 Route::resource('obat','ObatController');
 Route::get('/obatAjax','ObatController@obatAjax');
+Route::post('detailObat','ObatController@detailObat');
 
 Route::resource('interaksi', 'InteraksiController');
 Route::get('/interaksiAjax','InteraksiController@InteraksiAjax');
@@ -35,3 +36,16 @@ Route::get('/kontraindikasiAjax','KontraindikasiController@kontraindikasiAjax');
 
 Route::resource('pasien','PasienController');
 Route::get('/pasienAjax','PasienController@pasienAjax');
+
+Route::resource('resep','ResepController');
+Route::get('resepAjax','ResepController@resepAjax');
+Route::post('pasienForResep','ResepController@pasienForResep')->name('pasienForResep');
+Route::get('/pasienResepAjax','ResepController@pasienResepAjax');
+Route::prefix('resep')->group(function(){
+	Route::post('show', 'ResepController@show');
+	Route::get('{id}/detailResep','ResepController@detailResep')->name('detailResep');
+});
+Route::post('detailObatAjax','ResepController@detailObatAjax');
+
+Route::resource('detailResep','DetailResepController');
+Route::get('detailResepAjax','DetailResepController@detailResepAjax');

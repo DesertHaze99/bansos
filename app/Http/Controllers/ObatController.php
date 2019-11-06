@@ -95,7 +95,7 @@ class ObatController extends Controller
           'petunjukPenyimpanan' => 'required|string',
           'polaMakan' => 'required',
           'deskripsi' =>'required',
-          'gambarObat' => 'required|file|mimes:jpg,png'
+          'gambarObat' => 'required|image|mimes:jpg,png,jpeg'
          ]);
 
         DB::beginTransaction();
@@ -358,36 +358,116 @@ class ObatController extends Controller
         // }
     }
 
-    // public function modalDetail(Request $request)
-    // {
-    //     $id = $request['id'];
-    //     $data = Obat::with('detailObat')
-    //             ->where('obat_id',$id)
-    //             ->first();
+    public function detailObat(Request $request)
+    {
+        $id = $request->id;
+        // return $id;
+        $data = Obat::with(['detailObat','bentukObat','interaksiMapping' => function($query){
+          $query->with('interaksi');
+        },'kontraindikasiMapping' => function($query){
+          $query->with('kontraindikasi');
+        }])
+                ->where('obat_id',$id)
+                ->first();
+        // return $data;
+        $listInteraksi ='';
+        for ($i=0; $i < count($data->interaksiMapping) ; $i++) { 
+          $listInteraksi .= '<li>'.$data->interaksiMapping[$i]->interaksi->interaksi_name.'</li>';
+        }
 
-    //     $table = '';
-    //     $table =    '<table class="table">
-    //                   <thead>
-    //                     <tr>
-    //                       <th scope="col">Nama Obat</th>
-    //                       <th scope="col">Kadaluarsa</th>
-    //                       <th scope="col">Efek samping</th>
-    //                       <th scope="col">Pola makan</th>
-    //                       <th scope="col">Penyimpanan</th>
-    //                       <th scope="col">Deskripsi</th>
-    //                     </tr>
-    //                   </thead>
-    //                   <tbody>
-    //                     <tr>
-    //                       <td>'.$data->name.'</th>
-    //                       <td>'.$data->detailObat->kadaluarsa.'</td>
-    //                       <td>'.$data->detailObat->efek_samping.'</td>
-    //                       <td>'.$data->detailObat->pola_makan.'x sehari</td>
-    //                       <td>'.$data->detailObat->penyimpanan.'</td>
-    //                       <td>'.$data->detailObat->obat_description.'</td>
-    //                     </tr>
-    //                   </tbody>
-    //                 </table>';
-    //     return $table;
-    // }
+        $listKontraindikasi ='';
+        for ($i=0; $i < count($data->kontraindikasiMapping) ; $i++) { 
+          $listKontraindikasi = '<li>'.$data->kontraindikasiMapping[$i]->kontraindikasi->kontraindikasi.'</li>';
+        }
+
+        $table = '';
+        $table =    '
+                <div class="card">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr class="bg-blue">
+                          <th>Nama</th>
+                          <th>Gambar</th>
+                          <th>Bentuk</th>
+                          <th>Kesediaan</th>
+                          <th>Satuan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>'.$data->name.'</td>
+                          <td><img src="'.$data->detailObat->obat_image.'"></td>
+                          <td>'.$data->detailObat->bentukObat->bentuk.'</td>
+                          <td>'.$data->detailObat->kesediaan.'</td>
+                          <td>'.$data->detailObat->satuan.'</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr class="bg-warning">
+                          <th>Efek Samping</th>
+                          <th>Pola Makan</th>
+                          <th>Penyimpanan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>'.$data->detailObat->efek_samping.'</td>
+                          <td>'.$data->detailObat->pola_makan.'x sehari</td>
+                          <td>'.$data->detailObat->penyimpanan.'</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr class="bg-warning">
+                          <th>Interaksi</th>
+                          <th>Kontraindikasi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><ul>'.$listInteraksi.'</ul></td>
+                          <td><ul>'.$listKontraindikasi.'</ul></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr class="bg-danger">
+                          <th>Makanan</th>
+                          <th>Minuman</th>
+                          <th>umur</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>'.$data->detailObat->makanan.'</td>
+                          <td>'.$data->detailObat->minuman.'</td>
+                          <td>'.$data->detailObat->umur.'</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                ';
+        return $table;
+    }
 }

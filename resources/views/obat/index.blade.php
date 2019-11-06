@@ -63,6 +63,27 @@
 	        </div>
 	    </div>
 	@endsection
+
+	<div id="modal_form_horizontal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Horizontal form</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div id="result">
+						
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn bg-primary">Submit form</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /horizontal form modal -->
 @section('librariesJS')
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
@@ -89,5 +110,20 @@
                 "fixedColumns": true,
             });
         });
+
+        function modal(code){
+            var id = code;
+            console.log(id);
+            $.ajax({
+                url : "{!! url('detailObat')!!}",
+                method : "POST",
+                data : {id:id},
+                success : function(data){
+                    $('#result').html(data);
+                    $('#modal_form_horizontal').modal('show');
+                }
+            });
+        }
+
 	</script>
 @endsection

@@ -7,6 +7,7 @@ use DB;
 use URL;
 use Auth;
 use session;
+use App\Obat;
 use App\Dosis;
 
 class DosisController extends Controller
@@ -29,8 +30,7 @@ class DosisController extends Controller
     //ajax datatable
     public function dosisAjax()
     {
-        $data = Dosis::all();
-        $listKategori ='';
+        $data = Dosis::with('obat')->get();
         // return $data;
         return datatables()->of($data)
             ->addColumn('action',function($data){
@@ -42,6 +42,9 @@ class DosisController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
                             </form>';
                 return $button;
+            })
+            ->editColumn('obat_id',function($data){
+                return $data->obat->name;
             })
             ->removeColumn('updated_at')
             ->make(true);
@@ -55,7 +58,8 @@ class DosisController extends Controller
     
     public function create()
     {
-        return view('dosis.create');
+        $obat = Obat::all();
+        return view('dosis.create',compact('obat'));
     }
 
     public function store(Request $request)
