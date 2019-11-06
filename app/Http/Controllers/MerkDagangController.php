@@ -7,6 +7,7 @@ use DB;
 use Auth;
 use URL;
 use session;
+use App\Obat;
 use App\MerkDagang;
 
 class MerkDagangController extends Controller
@@ -29,8 +30,8 @@ class MerkDagangController extends Controller
     //ajax datatable
     public function merekDagangAjax()
     {
-        $data = MerkDagang::all();
-        $listKategori ='';
+        $data = MerkDagang::with('obat')->get();
+        
         // return $data;
         return datatables()->of($data)
             ->addColumn('action',function($data){
@@ -42,6 +43,9 @@ class MerkDagangController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
                             </form>';
                 return $button;
+            })
+            ->editColumn('obat_id',function($data){
+                return $data->obat->name;
             })
             ->removeColumn('updated_at')
             ->make(true);
@@ -55,7 +59,9 @@ class MerkDagangController extends Controller
 
     public function create()
     {
-        return view('merkDagang.create');
+        $obat = Obat::all();
+        // return $obat;
+        return view('merkDagang.create',compact('obat'));
     }
 
     public function store(Request $request)

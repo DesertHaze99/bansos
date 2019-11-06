@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dosis extends Model
+class DetailResep extends Model
 {
-    /*
+     /*
      * The table associated with the model.
      *
      * @var string
     */
-    protected $table = 'dosis';
+    protected $table = 'detail_resep';
 
 
     /**
@@ -19,7 +19,9 @@ class Dosis extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'dosis_id';
+    protected $primaryKey = 'detail_resep_id';
+
+    public $timestamps = false;
 
 
     /**
@@ -28,8 +30,17 @@ class Dosis extends Model
      * @var array
      */
     protected $fillable = [
+    	'detail_resep_id',
+        'resep_id',
         'obat_id',
-        'dosis_value'
+        'dosis',
+        'aturan_pakai',
+        'bentuk_obat',
+        'takaran_minum',
+        'waktu_minum',
+        'keterangan',
+        'jumlah_obat',
+        'jumlah_kali_minum'
     ];
 
     public function obat()

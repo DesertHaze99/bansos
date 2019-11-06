@@ -107,7 +107,7 @@
 						<a href="{{ URL::to('/pasien') }}" class="nav-link"><span>Pasien</span></a>
 					</li>
 					<li class="nav-item nav-item-submenu">
-						<a href="#" class="nav-link"><span>Starter kit</span></a>
+						<a href="{{ URL::to('/resep') }}" class="nav-link"><span>Resep</span></a>
 					</li>
 					<!-- /main -->
 

@@ -39,8 +39,9 @@
 					<div class="form-group">
 						<label>Obat</label>
 						<select class="form-control" name="obat">
-							<option>1</option>
-							<option>2</option>
+							@for($i=0;$i <count($obat);$i++)
+								<option value="{{ $obat[$i]->obat_id }}">{{ $obat[$i]->name }}</option>
+							@endfor
 						</select>
 					</div>
 					<div class="form-group">

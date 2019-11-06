@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MerkDagang extends Model
+class Resep extends Model
 {
     /*
      * The table associated with the model.
      *
      * @var string
     */
-    protected $table = 'merek_dagang';
+    protected $table = 'resep';
 
 
     /**
@@ -19,7 +19,7 @@ class MerkDagang extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id_merek_dagang';
+    protected $primaryKey = 'resep_id';
 
 
     /**
@@ -28,12 +28,15 @@ class MerkDagang extends Model
      * @var array
      */
     protected $fillable = [
-        'obat_id',
-        'merek_dagang_name'
+    	'resep_id',
+        'pasien_id',
+        'created_at',
+        'updated_at'
     ];
 
-    public function obat()
+    public function pasien()
     {
-        return $this->hasOne('App\obat','obat_id','obat_id');
+    	return $this->hasOne('App\pasien','no_rm','pasien_id');
     }
 }
+
