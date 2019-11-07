@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DetailResep;
+use App\Resep;
 use Session;
 use DB;
 use URL;
@@ -137,5 +138,22 @@ class DetailResepController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function qrcode($id)
+    {
+        $resep = Resep::with(['detail' => function($query){
+            $query->with('detailObat', 'obat');
+        },'pasien'])
+            ->where('resep_id',$id)
+            ->first();
+
+        //return $resep;
+        
+        \QrCode::size(500)
+			  ->format('png')
+			  ->generate('resep', public_path('images/qrcode.png'));
+	  
+	    return view('qrcode')->with(['resep' => $resep]);
     }
 }

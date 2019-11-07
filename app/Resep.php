@@ -38,5 +38,10 @@ class Resep extends Model
     {
     	return $this->hasOne('App\pasien','no_rm','pasien_id');
     }
+
+    public function detail()
+    {
+        return $this->hasMany('App\DetailResep','resep_id','resep_id');
+    }
 }
 

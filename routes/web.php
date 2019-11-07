@@ -44,6 +44,7 @@ Route::get('/pasienResepAjax','ResepController@pasienResepAjax');
 Route::prefix('resep')->group(function(){
 	Route::post('show', 'ResepController@show');
 	Route::get('{id}/detailResep','ResepController@detailResep')->name('detailResep');
+	Route::get('{id}/qr','DetailResepController@qrcode')->name('printResep');
 });
 Route::post('detailObatAjax','ResepController@detailObatAjax');
 
