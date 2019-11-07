@@ -127,7 +127,9 @@
 	        		</div>
 	        		<div class="col-md-6">
 	        			<div class="text-right">
-			        		<button class="btn btn-success" href="{{URL::to('/pasien/create')}}">Print Resep</button>
+							<form action="{{ URL::to('/resep/'.$info->resep_id.'/qr')}}">
+								<input class="btn btn-success" type="submit" value="Print Resep" />
+							</form>
 			        	</div>
 	        		</div>
 	        	</div>

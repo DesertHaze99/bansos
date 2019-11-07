@@ -23,7 +23,7 @@ class ResepController extends Controller
         return view('resep.index');
     }
 
-    public function ressepAjax()
+    public function resepAjax()
     {
         return 0;
     }
@@ -185,7 +185,7 @@ class ResepController extends Controller
             '1' => 'harus habis',
             '2' => 'rutin' 
         ];
-        // return $obat;
+        // return $info;
         return view('resep.detailResep',compact('info','obat','bentukObat','waktuMinum','keterangan'));
     }
 
@@ -199,4 +199,8 @@ class ResepController extends Controller
 
         return $obat;
     }
+    
+
+
+
 }

@@ -47,4 +47,9 @@ class DetailResep extends Model
     {
     	return $this->hasOne('App\Obat','obat_id','obat_id');
     }
+
+    public function detailObat()
+    {
+    	return $this->hasOne('App\DetailObat','obat_id','obat_id');
+    }
 }
