@@ -25,7 +25,25 @@ class ResepController extends Controller
 
     public function resepAjax()
     {
-        return 0;
+        $data = Resep::with('pasien')->get();
+        // return $data;
+        return datatables()->of($data)
+            ->addColumn('action',function($data){
+                $button = '';
+                $button .= '<form id="myform" method="post" action="'.route('detailResep.destroy',$data->resep_id).'">
+                                '.csrf_field().'
+                                <a href="'.URL::to('/resep/'.$data->resep_id.'/detailResep').'" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Detail</a>
+                                <a href="' .URL::to('/detailResep/' . $data->resep_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <input name="_method" type="hidden" value="DELETE">
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                            </form>';
+                return $button;
+            })
+            ->addColumn('pasien',function($data){
+                return $data->pasien->nama;
+            })
+            ->removeColumn('updated_at')
+            ->make(true);
     }
 
     public function pasienResepAjax()

@@ -284,7 +284,7 @@
                 "destroy": true,
                 "processing": true,
                 "serverSide": true,
-                "ajax": {'url':"{{ url('detailResepAjax') }}",
+                "ajax": {'url':"{{ url('resep/'.$info->resep_id.'/detailResepAjax') }}",
                         'headers':"{{ csrf_token() }}"},
                 "order": ['0', 'desc'],
                 "dataSrc": "data",
