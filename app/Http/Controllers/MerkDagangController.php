@@ -32,8 +32,9 @@ class MerkDagangController extends Controller
     {
         $data = MerkDagang::with('obat')->get();
         
-        // return $data;
+        //return $data;
         return datatables()->of($data)
+
             ->addColumn('action',function($data){
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('merkDagang.destroy',$data->id_merek_dagang).'">
