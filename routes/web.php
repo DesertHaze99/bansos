@@ -14,6 +14,7 @@
 Route::get('/','DashboardController@index');
 
 Route::resource('obat','ObatController');
+Route::post('obatExcel','ObatController@storeExcel')->name('storeExcel');
 Route::get('/obatAjax','ObatController@obatAjax');
 Route::post('detailObat','ObatController@detailObat');
 

@@ -45,6 +45,8 @@ class DetailObat extends Model
         'umur'
     ];
 
+    protected $guarded = [];
+
     public function bentukObat()
     {
         return $this->hasOne('App\BentukObat','bentuk_obat_id','bentuk_obat');

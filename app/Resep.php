@@ -36,7 +36,7 @@ class Resep extends Model
 
     public function pasien()
     {
-    	return $this->hasOne('App\pasien','no_rm','pasien_id');
+    	return $this->hasOne('App\Pasien','no_rm','pasien_id');
     }
 
     public function detail()
