@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use URL;
 use session;
+use Excel;
 use App\BentukObat;
 use App\Obat;
 use App\Kontraindikasi;
@@ -13,6 +14,7 @@ use App\Interaksi;
 use App\DetailObat;
 use App\KontraindikasiMapping;
 use App\InteraksiMapping;
+use App\Imports\ObatImport;
 use Image;
 
 class ObatController extends Controller
@@ -145,7 +147,22 @@ class ObatController extends Controller
           DB::rollback();
           return redirect()->route('obat.index')->with('error','Ada sesuatu yang tidak beres silahkan hubungi pengembang');
         }
+    }
 
+    public function storeExcel(Request $request)
+    {
+      $this->validate($request,[
+        'file' => 'required|mimes:xlx,xlsx'
+      ]);
+
+      if ($request->hasFile('file')) 
+      {
+        $file = $request->file('file');
+        Excel::import(new ObatImport, $file);
+        return redirect()->route('obat.index')->with('success','Obat berhasil ditambahkan');
+      }else{
+        return redirect()->route('obat.index')->with('warning','Silahkan pilih file excel');
+      }
     }
 
     /**

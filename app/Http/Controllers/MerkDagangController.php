@@ -34,7 +34,6 @@ class MerkDagangController extends Controller
         
         //return $data;
         return datatables()->of($data)
-
             ->addColumn('action',function($data){
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('merkDagang.destroy',$data->id_merek_dagang).'">

@@ -35,6 +35,8 @@ class Obat extends Model
         'created_at'
     ];
 
+    protected $guarded = [];
+
     public function detailObat()
     {
     	return $this->hasOne('App\DetailObat','obat_id','obat_id');

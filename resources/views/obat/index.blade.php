@@ -41,7 +41,28 @@
 
 		<div class="card">
 	        <div class="card-header">
-	        	<a class="btn btn-primary" href="{{URL::to('/obat/create')}}">Tambah obat baru</a>
+	        	<div class="row">
+	        		<div class="col-md-6">
+	        			<div class="text-left">
+							<a class="btn btn-primary" href="{{URL::to('/obat/create')}}">Tambah obat baru</a>
+						</div>		
+	        		</div>
+	        		<div class="col-md-6">
+	        			<div class="text-right">
+							<button id="excel" class="btn btn-success">Input Obat dengan excel</button>
+						</div>
+	        		</div>
+	        	</div>
+	        	<div id="excelForm" class="card mt-3" style="display: none;">
+	        		<!-- Single file upload -->
+	        		<div class="card-header">
+	        			<p class="font-weight-semibold">Single file upload example:</p>
+	        		</div>
+	        		<div class="card-body">
+	        			<form id="formDropzone" action="{{ Route('storeExcel') }}" class="dropzone" id="dropzone_single">@csrf</form>
+	        		</div>
+					<!-- /single file upload -->
+	        	</div>
 	        </div>
 	        <div class="card-body">
 	            <div class="table-responsive">
@@ -62,32 +83,32 @@
 	            </div>
 	        </div>
 	    </div>
-	@endsection
-
-	<div id="modal_form_horizontal" class="modal fade" tabindex="-1">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Horizontal form</h5>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div id="result">
-						
+	    <div id="modal_form_horizontal" class="modal fade" tabindex="-1">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Horizontal form</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn bg-primary">Submit form</button>
+					<div class="modal-body">
+						<div id="result">
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn bg-primary">Submit form</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- /horizontal form modal -->
+	@endsection
 @section('librariesJS')
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/demo_pages/datatables_basic.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/uploaders/dropzone.min.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/demo_pages/uploader_dropzone.js') }}"></script>
 @endsection
 @section('script')
 	<script>
@@ -109,6 +130,15 @@
                 ],
                 "fixedColumns": true,
             });
+
+            $('#excel').on('click',function(){
+            	$('#excelForm').toggle();
+            });
+
+            $('formDropzone').dropzone({
+            	url : '{{ Route('storeExcel') }}',
+            	autoProcessQueue : true
+            })
         });
 
         function modal(code){
