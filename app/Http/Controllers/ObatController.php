@@ -155,14 +155,52 @@ class ObatController extends Controller
         'file' => 'required|mimes:xlx,xlsx'
       ]);
 
-      if ($request->hasFile('file')) 
+      // if ($request->hasFile('file')) 
+      // {
+      //   $file = $request->file('file');
+      //   Excel::import(new ObatImport, $file);
+      //   return redirect()->route('obat.index')->with('success','Obat berhasil ditambahkan');
+      // }else{
+      //   return redirect()->route('obat.index')->with('warning','Silahkan pilih file excel');
+      // }
+
+      $path = $request->file('file')->getRealPath();
+
+      $data = Excel::load($path)->get();
+
+      $value = $data->toArray();
+
+      if($data->count() > 0)
       {
-        $file = $request->file('file');
-        Excel::import(new ObatImport, $file);
-        return redirect()->route('obat.index')->with('success','Obat berhasil ditambahkan');
-      }else{
-        return redirect()->route('obat.index')->with('warning','Silahkan pilih file excel');
+        foreach($value as $row)
+        {
+          $insert_data_obat[] = array(
+          'obat_id' => array_get($row,'id'),
+          'name'  => array_get($row,'name'),
+          'created_at' => $date = date('Y-m-d H:i:s'),
+          'updated_at' => $date = date('Y-m-d H:i:s')
+          );
+
+          $insert_data_detailObat[] = array(
+            'obat_id' => array_get($row,'id'),
+            'obat_image'  => array_get($row, 'gambar'),
+            'bentuk_obat'   => array_get($row, 'bentuk_obat'),
+            'kesediaan'   => array_get($row,'kesediaan'),
+            'satuan'    => array_get($row,'satuan'),
+            'efek_samping'  => array_get($row,'efek_samping'),
+            'pola_makan'   => array_get($row,'pola_makan'),
+            'penyimpanan'   => array_get($row,'penyimpanan'),
+            'obat_description'   => array_get($row,'diskripsi')
+            );
+        }
+
+        if(!empty($insert_data_obat) && !empty($insert_data_detailObat))
+        {
+          DB::table('obat')->insert($insert_data_obat);
+          DB::table('detail_obat')->insert($insert_data_detailObat);
+        }
       }
+      return back()->with('success', 'Excel Data Imported successfully.');
     }
 
     /**
