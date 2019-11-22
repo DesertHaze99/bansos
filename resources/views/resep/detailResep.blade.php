@@ -1,6 +1,37 @@
 @extends('layouts.app')
 
 	@section('content')
+		@if ($errors->any())
+	        <div class="box-body col-12 col-md-12 col-lg-12">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+	                <ul>
+	                    @foreach ($errors->all() as $error)
+	                        <li>{{ $error }}</li>
+	                    @endforeach
+	                </ul>
+	            </div>
+	        </div>
+	    @endif
+	    @if (session('success'))
+	        <div class="box-body">
+	            <div class="alert alert-success alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Success!</h4>
+	                    {{ session('success') }}
+	            </div>
+	        </div>
+	    @endif
+		@if (session('error'))
+	        <div class="box-body">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+	                    {{ session('error') }}
+	            </div>
+	        </div>
+	    @endif
 		{{-- start breadcrumb --}}
 		<div class="card page-header page-header-light">
 		    <div class="page-header-content header-elements-md-inline">
@@ -12,7 +43,7 @@
 		    <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
 			    <div class="d-flex">
 			        <div class="breadcrumb">
-			            <a href="{{ URL::to('/resep')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>pasien</a>
+			            <a href="{{ URL::to('/resep')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>Resep</a>
 			            <a href="{{ URL::to('/resep/create')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>create</a>
 			            <span class="breadcrumb-item active">Detail resep</span>
 			        </div>
@@ -122,13 +153,13 @@
 	        	<div class="row">
 	        		<div class="col-md-6">
 	        			<div class="text-left">
-			        		<button id="modal" class="btn btn-primary">Tambahkan obat</button>
+			        		<button id="modal" class="btn btn-primary"><i class="far fa-plus-square mr-2"></i>Tambahkan obat</button>
 			        	</div>
 	        		</div>
 	        		<div class="col-md-6">
 	        			<div class="text-right">
 							<form action="{{ URL::to('/resep/'.$info->resep_id.'/qr')}}">
-								<input class="btn btn-success" type="submit" value="Print Resep" />
+								<button class="btn btn-success" type="submit"/><i class="fas fa-print mr-2"></i>Print resep</button>
 							</form>
 			        	</div>
 	        		</div>
@@ -171,11 +202,8 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<label>Nama Obat</label>
-										<select id="namaObat" class="form-control" placeholder="silahkan pilih obat" name="namaObat">
-											@for($i =0 ; $i < count($obat);$i++)
-												<option value="{{ $obat[$i]->obat_id }}">{{ $obat[$i]->name }} {{ $obat[$i]->detailObat->kesediaan}} {{ $obat[$i]->detailObat->satuan }}</option>
-											@endfor
-										</select>
+										<input id="inputObat" class="form-control" placeholder="silahkan pilih obat" name="obat">
+										</input>
 									</div>
 								</div>
 							</div>
@@ -216,7 +244,7 @@
 							</div>
 							<div class="form-group">
 								<div class="row">
-									<div class="col-sm-12">
+									<div class="col-sm-6">
 										<label>Waktu Minum</label>
 										<select class="form-control" placeholder="pilih waktu minum" name="waktuMinum">
 											@for($i=0;$i<count($waktuMinum);$i++)
@@ -224,11 +252,7 @@
 											@endfor
 										</select>
 									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="row">
-									<div class="col-sm-12">
+									<div class="col-sm-6">
 										<label>Keterangan</label>
 										<select class="form-control" placeholder="pilih waktu minum" name="keterangan">
 											@for($i=0;$i<count($keterangan);$i++)
@@ -238,20 +262,14 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<div class="row">
-									<div class="col-sm-12">
-										<label>Jumlah obat</label>
-										<input id="jumlahObat" type="number" class="form-control" name="jumlahObat">
-									</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label>Jumlah obat</label>
+									<input id="jumlahObat" type="number" class="form-control" name="jumlahObat">
 								</div>
-							</div>
-							<div class="form-group">
-								<div class="row">
-									<div class="col-sm-12">
-										<label>Jumlah kali minum</label>
-										<input id="jumlahKaliMinum" type="text" class="form-control" name="jumlahKaliMinum" readonly>
-									</div>
+								<div class="col-sm-8">
+									<label>Jumlah kali minum</label>
+									<input id="jumlahKaliMinum" type="text" class="form-control" name="jumlahKaliMinum" readonly>
 								</div>
 							</div>
 						</div>
@@ -270,6 +288,11 @@
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/demo_pages/datatables_basic.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('limitless/Template/global_assets/js/demo_pages/jqueryui_forms.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/extensions/jquery_ui/widgets.min.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/extensions/jquery_ui/effects.min.js') }}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/extensions/mousewheel.min.js') }}"></script>
 @endsection
 @section('script')
 	<script>
@@ -298,24 +321,64 @@
                 "fixedColumns": true,
             });
 
-			var kesediaan = 0;
-			$("#namaObat").on('change',function(){
-				var id = $(this).val();
-				console.log(id);
-				if(id != ''){
-					$.ajax({
-						url: "{!! URL('detailObatAjax') !!}",
-						method:"post",
-						data: {id:id},
-						success: function(data){
-							var obat = data;
-							kesediaan =  obat.detail_obat.kesediaan;
-							$('#bentukObat').val(obat.detail_obat.bentuk_obat.bentuk);
-							console.log(kesediaan);
-						}
-					});
-				}
+			$('#inputObat').autocomplete({
+				source: ["c++","guys"],	
+				// function(request,response){
+				// 	$.ajax({
+				// 		url: "{{ route('autoCompleteObat') }}",
+				// 		data: {
+				// 			 term : request.term
+				// 		},
+				// 		dataType: "json",
+				// 		success: function(data){
+				// 			var resp = $.map(data,function(obj){
+				// 				console.log(obj.name);
+				// 				return obj.name;
+				// 			});
+				// 			console.log(resp);
+				// 			response(resp);
+				// 		}
+				// 	});
+				// },
+				
 			});
+
+			// var kesediaan = 0;
+   //          $('#obat').select2({
+   //          	ajax: {
+   //          		url : "{{ route('autoCompleteObat') }}",
+   //          		dataType: 'json',
+   //          		delay: 100,
+   //          		processResults:  function($data){
+   //          			results: $.map(data,function(item){	
+	  //           			return {
+	  //           				text:item.name,
+	  //           				id:item.obat_id
+	  //           			}
+	  //           			kesediaan =  obat.detail_obat.kesediaan;
+	  //           			$('#bentukObat').val(item.detail_obat.bentuk_obat.bentuk);
+   //          			})
+   //          		}
+   //          	}
+   //          });
+			
+			// $("#namaObat").on('change',function(){
+			// 	var id = $(this).val();
+			// 	console.log(id);
+			// 	if(id != ''){
+			// 		$.ajax({
+			// 			url: "{!! URL('detailObatAjax') !!}",
+			// 			method:"post",
+			// 			data: {id:id},
+			// 			success: function(data){
+			// 				var obat = data;
+			// 				kesediaan =  obat.detail_obat.kesediaan;
+			// 				$('#bentukObat').val(obat.detail_obat.bentuk_obat.bentuk);
+			// 				console.log(kesediaan);
+			// 			}
+			// 		});
+			// 	}
+			// });
 
 			var takaran = 0;
 			$('#dosis').on('keyup',function(){

@@ -13,6 +13,11 @@ use DB;
 
 class ResepController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +35,11 @@ class ResepController extends Controller
         return datatables()->of($data)
             ->addColumn('action',function($data){
                 $button = '';
-                $button .= '<form id="myform" method="post" action="'.route('detailResep.destroy',$data->resep_id).'">
+                $button .= '<form id="myform" method="post" action="'.route('resep.destroy',$data->resep_id).'">
                                 '.csrf_field().'
-                                <a href="'.URL::to('/resep/'.$data->resep_id.'/detailResep').'" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Detail</a>
-                                <a href="' .URL::to('/detailResep/' . $data->resep_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="'.URL::to('/resep/'.$data->resep_id.'/detailResep').'" class="btn btn-sm btn-success"><i class="fas fa-book mr-1"></i> Detail</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })
@@ -182,7 +186,9 @@ class ResepController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $resep = Resep::findOrFail($id);
+        $resep->delete();
+        // return $resep;
     }
 
     public function detailresep($id)

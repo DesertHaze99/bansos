@@ -2,6 +2,28 @@
 
 @section('content')
 	{{-- start breadcrumb --}}
+	@if ($errors->any())
+        <div class="box-body col-12 col-md-12 col-lg-12">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+	@if (session('error'))
+        <div class="box-body">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                    {{ session('error') }}
+            </div>
+        </div>
+    @endif
 	<div class="card page-header page-header-light">
 		    <div class="page-header-content header-elements-md-inline">
 		        <div class="page-title">

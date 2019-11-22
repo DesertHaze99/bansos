@@ -2,6 +2,20 @@
 
 	@section('content')
 
+		@if ($errors->any())
+            <div class="box-body col-12 col-md-12 col-lg-12">
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+        
 		@if (session('success'))
 	        <div class="box-body">
 	            <div class="alert alert-success alert-dismissible">
@@ -44,12 +58,12 @@
 	        	<div class="row">
 	        		<div class="col-md-6">
 	        			<div class="text-left">
-							<a class="btn btn-primary" href="{{URL::to('/obat/create')}}">Tambah obat baru</a>
+							<a class="btn btn-primary" href="{{URL::to('/obat/create')}}"><i class="far fa-plus-square mr-2"></i>Tambah obat baru</a>
 						</div>		
 	        		</div>
 	        		<div class="col-md-6">
 	        			<div class="text-right">
-							<button id="excel" class="btn btn-success">Input Obat dengan excel</button>
+							<button id="excel" class="btn btn-success"><i class="far fa-file-excel mr-2"></i>Input Obat dengan excel</button>
 						</div>
 	        		</div>
 	        	</div>

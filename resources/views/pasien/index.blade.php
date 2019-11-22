@@ -1,12 +1,42 @@
 @extends('layouts.app')
 
 	@section('content')
+        @if ($errors->any())
+            <div class="box-body col-12 col-md-12 col-lg-12">
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="box-body">
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Success!</h4>
+                        {{ session('success') }}
+                </div>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="box-body">
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                        {{ session('error') }}
+                </div>
+            </div>
+        @endif
 	   {{-- start breadcrumb --}}
         <div class="card page-header page-header-light">
             <div class="page-header-content header-elements-md-inline">
                 <div class="page-title">
                     <h2><span class="font-weight-semibold mx-2">APOTECH</span> - Pasien</h2>
-                    <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
                 </div>
             </div>
             <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
@@ -15,7 +45,6 @@
                         <a href="{{ URL::to('/pasien')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>Pasien</a>
                         <span class="breadcrumb-item active">Dashboard</span>
                     </div>
-                    <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
                 </div>
             </div>
         </div>
@@ -23,7 +52,7 @@
 		
 		<div class="card">
 	        <div class="card-header">
-	        	<a class="btn btn-primary" href="{{URL::to('/pasien/create')}}">Tambah pasien baru</a>
+	        	<a class="btn btn-primary" href="{{URL::to('/pasien/create')}}"><i class="far fa-plus-square mr-2"></i>Tambah pasien baru</a>
 	        </div>
 	        <div class="card-body">
 	            <div class="table-responsive">

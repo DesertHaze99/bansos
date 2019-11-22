@@ -11,10 +11,10 @@ use App\Kontraindikasi;
 
 class KontraindikasiController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     /**
      * Display a listing of the resource.
@@ -37,9 +37,9 @@ class KontraindikasiController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('kontraindikasi.destroy',$data->kontraindikasi_id).'">
                                 '.csrf_field().'
-                                <a href="' .URL::to('/kontraindikasi/' . $data->kontraindikasi_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="' .URL::to('/kontraindikasi/' . $data->kontraindikasi_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })

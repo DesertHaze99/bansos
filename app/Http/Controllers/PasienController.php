@@ -11,10 +11,10 @@ use App\Pasien;
 
 class PasienController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     /**
      * Display a listing of the resource.
@@ -37,9 +37,9 @@ class PasienController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('pasien.destroy',$data->no_rm).'">
                                 '.csrf_field().'
-                                <a href="' .URL::to('/pasien/' . $data->no_rm . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="' .URL::to('/pasien/' . $data->no_rm . '/edit'). '" class="btn btn-sm btn-warning"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })
@@ -79,7 +79,7 @@ class PasienController extends Controller
             $pasien->added_by = Auth::user()->id;
             $pasien->save();
             DB::commit();
-            return redirect()->route('pasien.index')->with('success','Merk dagang berhasil ditambahkan');
+            return redirect()->route('pasien.index')->with('success','Pasien berhasil ditambahkan');
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->route('pasien.create')->with('error','Ada yang tidak beres silahkan hubungi pengembang');
@@ -101,12 +101,18 @@ class PasienController extends Controller
             'no_telp' => 'required',
             'alamat' => 'required'
         ]);
+        DB::beginTransaction();
         try {
             $pasien = Pasien::findOrFail($id);
-            $pasien->pasien = $request->pasien;
+            $pasien->nama = $request->nama;
+            $pasien->jenis_kelamin = $request->jenis_kelamin;
+            $pasien->tanggal_lahir = $request->tanggal_lahir;
+            $pasien->no_telp = $request->no_telp;
+            $pasien->alamat = $request->alamat;
+            $pasien->added_by = Auth::user()->id;
             $pasien->save();
             DB::commit();
-            return redirect()->route('pasien.index')->with('success','Merk dagang berhasil diubah');
+            return redirect()->route('pasien.index')->with('success','Pasien berhasil diubah');
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->route('pasien.edit',$id)->with('error','Ada yang tidak beres silahkan hubungi pengembang');
@@ -115,11 +121,12 @@ class PasienController extends Controller
 
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $pasien = Pasien::findOrFail($id);
             $pasien->delete();
             DB::commit();
-            return redirect()->route('pasien.index')->with('success','Merk dagang berhasil dihapus');
+            return redirect()->route('pasien.index')->with('success','Pasien berhasil dihapus');
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->route('pasien.index')->with('error','Ada yang tidak beres silahkan hubungi pengembang');

@@ -46,10 +46,10 @@ class ObatController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('obat.destroy',$data->obat_id).'">
                                 '.csrf_field().'
-                                <a href="" onClick="modal(\''.$data->obat_id.'\')" data-toggle="modal" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Detail</a>
-                                <a href="' .URL::to('/obat/' . $data->obat_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="" onClick="modal(\''.$data->obat_id.'\')" data-toggle="modal" class="btn btn-sm btn-success mr-2"><i class="fas fa-book mr-1"></i> Detail</a>
+                                <a href="' .URL::to('/obat/' . $data->obat_id . '/edit'). '" class="btn btn-sm btn-warning mr-2"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })
@@ -382,27 +382,27 @@ class ObatController extends Controller
           $obat = obat::findOrFail($id);
           $obat->delete();
 
-          $detailObat = DetailObat::where('obat_id',$id);
-          $detailObat->delete();
+          // $detailObat = DetailObat::where('obat_id',$id);
+          // $detailObat->delete();
 
-          $interaksiMapping = InteraksiMapping::where('obat_id',$id);
-          if (is_array($interaksiMapping)) {
-            for ($i=0; $i < count($interaksiMapping) ; $i++) { 
-              $interaksiMapping[$i]->delete();
-            }
+          // $interaksiMapping = InteraksiMapping::where('obat_id',$id);
+          // if (is_array($interaksiMapping)) {
+          //   for ($i=0; $i < count($interaksiMapping) ; $i++) { 
+          //     $interaksiMapping[$i]->delete();
+          //   }
 
-          } else {
-            $interaksiMapping->delete();
-          }
+          // } else {
+          //   $interaksiMapping->delete();
+          // }
           
-          $kontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id);
-          if (is_array($kontraindikasiMapping)) {
-            for ($i=0; $i < count($kontraindikasiMapping) ; $i++) { 
-              $kontraindikasiMapping[$i]->delete();
-            }
-          } else {
-            $kontraindikasiMapping->delete();
-          }
+          // $kontraindikasiMapping = KontraindikasiMapping::where('obat_id',$id);
+          // if (is_array($kontraindikasiMapping)) {
+          //   for ($i=0; $i < count($kontraindikasiMapping) ; $i++) { 
+          //     $kontraindikasiMapping[$i]->delete();
+          //   }
+          // } else {
+          //   $kontraindikasiMapping->delete();
+          // }
           
 
           // DB::commit();

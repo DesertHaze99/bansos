@@ -59,7 +59,7 @@
 				</div>
 				
 				<div class="text-right">
-					<button class="btn btn-warning" action="{{ URL::to('/pasien') }}">Back</button>
+					<a class="btn btn-warning" href="{{ URL::to('/pasien') }}"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back</a>
 					<button type="submit" class="btn btn-primary">Submit<i class="icon-paperplane ml-2"></i></button>
 				</div>
 			</form>

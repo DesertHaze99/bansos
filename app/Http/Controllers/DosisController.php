@@ -37,9 +37,9 @@ class DosisController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('dosis.destroy',$data->dosis_id).'">
                                 '.csrf_field().'
-                                <a href="' .URL::to('/dosis/' . $data->dosis_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="' .URL::to('/dosis/' . $data->dosis_id . '/edit'). '" class="btn btn-sm btn-warning mr-2"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })
