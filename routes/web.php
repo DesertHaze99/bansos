@@ -51,6 +51,7 @@ Route::prefix('resep')->group(function(){
 	Route::get('{resepId}/detailResep/{detailObatId}/detailObat','DetailResepController@detail');
 });
 Route::post('detailObatAjax','ResepController@detailObatAjax');
+Route::get('autoCompleteObat','DetailResepController@autoCompleteObat')->name('autoCompleteObat');
 
 Route::resource('detailResep','DetailResepController');
 

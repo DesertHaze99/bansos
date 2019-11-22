@@ -9,6 +9,7 @@
 <link href="{{ asset('limitless/Template/global_assets/css/icons/icomoon/styles.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/bootstrap_limitless.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('limitless/Template/global_assets/css/icons/fontawesome/styles.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/layout.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">

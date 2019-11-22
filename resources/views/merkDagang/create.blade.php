@@ -1,12 +1,35 @@
 @extends('layouts.app')
 
 	@section('content')
+		@if ($errors->any())
+	        <div class="box-body col-12 col-md-12 col-lg-12">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+	                <ul>
+	                    @foreach ($errors->all() as $error)
+	                        <li>{{ $error }}</li>
+	                    @endforeach
+	                </ul>
+	            </div>
+	        </div>
+	    @endif
+	    
+	    @if (session('error'))
+	        <div class="box-body">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+	                    {{ session('error') }}
+	            </div>
+	        </div>
+	    @endif
+	    
 		{{-- start breadcrumb --}}
 		<div class="card page-header page-header-light">
 		    <div class="page-header-content header-elements-md-inline">
 		        <div class="page-title">
 		            <h2><span class="font-weight-semibold mx-2">APOTECH</span> - Tambah merk dagang baru</h2>
-		            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
 		        </div>
 		    </div>
 		    <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
@@ -15,7 +38,6 @@
 			            <a href="{{ URL::to('/merkDagang')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>Merk dagang</a>
 			            <span class="breadcrumb-item active">Create</span>
 			        </div>
-			        <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
 			    </div>
 			</div>
 		</div>
@@ -49,7 +71,7 @@
 						<input type="text" class="form-control" placeholder="Silahkan masukan interaksi yang dinginkan" name="merkDagangName">
 					</div>
 					<div class="text-right">
-						<button class="btn btn-warning" action="{{ URL::to('/merkDagang') }}">Back</button>
+						<a class="btn btn-warning" href="{{ URL::to('/merkDagang') }}"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back</a>
 						<button type="submit" class="btn btn-primary">Submit<i class="icon-paperplane ml-2"></i></button>
 					</div>
 				</form>

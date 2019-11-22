@@ -38,9 +38,9 @@ class MerkDagangController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('merkDagang.destroy',$data->id_merek_dagang).'">
                                 '.csrf_field().'
-                                <a href="' .URL::to('/merkDagang/' . $data->id_merek_dagang . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="' .URL::to('/merkDagang/' . $data->id_merek_dagang . '/edit'). '" class="btn btn-sm btn-warning mr-2"><i class="fas fa-edit mr-1"></i>Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash-alt mr-1"></i> Delete</button>
                             </form>';
                 return $button;
             })

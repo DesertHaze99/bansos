@@ -16,6 +16,16 @@
             </div>
         @endif
 
+        @if (session('error'))
+	        <div class="box-body">
+	            <div class="alert alert-danger alert-dismissible">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <h4><i class="icon fa fa-ban"></i> Success!</h4>
+	                    {{ session('error') }}
+	            </div>
+	        </div>
+	    @endif
+
 		{{-- start breadcrumb --}}
 		<div class="card page-header page-header-light">
 		    <div class="page-header-content header-elements-md-inline">
@@ -63,60 +73,75 @@
 						<span class="form-text text-muted">Accepted formats:png, jpg. Max file size 2Mb</span>
 						<img id="obatImg" src="#" height="" width="" style="visibility: hidden;">
 					</div>
-					<div class="form-group">
-						<label>Bentuk Obat :</label>
-						<select class="form-control" placeholder="Silahkan pilih bentuk obat" name="bentuk" required>
-							@for($i=0;$i < count($bentukObat); $i++)
-								<option value="{{ $bentukObat[$i]->bentuk_obat_id }}"> {{ $bentukObat[$i]->bentuk }} </option>
-							@endfor
-						</select>
+					<div class="form-group row">
+						<div class="col-md-4">
+							<label>Bentuk Obat :</label>
+							<select class="form-control" placeholder="Silahkan pilih bentuk obat" name="bentuk" required>
+								@for($i=0;$i < count($bentukObat); $i++)
+									<option value="{{ $bentukObat[$i]->bentuk_obat_id }}"> {{ $bentukObat[$i]->bentuk }} </option>
+								@endfor
+							</select>
+						</div>
+						<div class="col-md-4">
+							<label>Kesediaan :</label>
+							<input type="text" class="form-control" placeholder="Silahkan masukan kesediaan obat" name="kesediaan" required>
+						</div>
+						<div class="col-md-4">
+							<label>Satuan :</label>
+							<select class="form-control" name="satuan" required>
+								@for($i=0;$i < count($satuan);$i++)
+									<option>{{ $satuan[$i] }}</option>
+								@endfor
+							</select>
+						</div>
 					</div>
-					<div class="form-group">
-						<label>Kesediaan :</label>
-						<input type="text" class="form-control" placeholder="Silahkan pilih bentuk obat" name="kesediaan" required>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label>Kontraindikasi :</label>
+							<select multiple="multiple" data-placeholder="Pilih kontraindikasi obat" class="form-control form-control-select2" data-fouc name="kontraindikasi[]" required>
+								@for($i=0;$i < count($kontraindikasi);$i++)
+									<option value="{{ $kontraindikasi[$i]->kontraindikasi_id}}">{{ $kontraindikasi[$i]->kontraindikasi }}</option>
+								@endfor
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label>Interaksi :</label>
+							<select multiple="multiple" data-placeholder="Pilih kontraindikasi obat" class="form-control form-control-select2" data-fouc name="interaksi[]" required>
+								@for($i=0;$i < count($interaksi);$i++)
+									<option value="{{ $interaksi[$i]->interaksi_id}}">{{ $interaksi[$i]->interaksi_name }}</option>
+								@endfor
+							</select>
+						</div>
 					</div>
-					<div class="form-group">
-						<label>Satuan :</label>
-						<select class="form-control" name="satuan" required>
-							@for($i=0;$i < count($satuan);$i++)
-								<option>{{ $satuan[$i] }}</option>
-							@endfor
-						</select>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label>Efek Samping :</label>
+							<input type="text" class="form-control" placeholder="masukan efek samping obat" name="efekSamping" required>
+						</div>
+						<div class="col-md-6">
+							<label>Petunjuk Penyimpanan :</label>
+							<input type="text" class="form-control" placeholder="masukan metode penyimpanan" name="petunjukPenyimpanan" required>
+						</div>
 					</div>
-					<div class="form-group">
-						<label>Kontraindikasi :</label>
-						<select multiple="multiple" data-placeholder="Pilih kontraindikasi obat" class="form-control form-control-select2" data-fouc name="kontraindikasi[]" required>
-							@for($i=0;$i < count($kontraindikasi);$i++)
-								<option value="{{ $kontraindikasi[$i]->kontraindikasi_id}}">{{ $kontraindikasi[$i]->kontraindikasi }}</option>
-							@endfor
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Interaksi :</label>
-						<select multiple="multiple" data-placeholder="Pilih kontraindikasi obat" class="form-control form-control-select2" data-fouc name="interaksi[]" required>
-							@for($i=0;$i < count($interaksi);$i++)
-								<option value="{{ $interaksi[$i]->interaksi_id}}">{{ $interaksi[$i]->interaksi_name }}</option>
-							@endfor
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Efek Samping :</label>
-						<input type="text" class="form-control" placeholder="Silahkan pilih bentuk obat" name="efekSamping" required>
-					</div>
-					<div class="form-group">
-						<label>Petunjuk Penyimpanan :</label>
-						<input type="text" class="form-control" placeholder="Silahkan pilih bentuk obat" name="petunjukPenyimpanan" required>
-					</div>
-					<div class="form-group">
-						<label>Pola Makan</label>
-						<input type="text" class="form-control" placeholder="Silahkan pilih bentuk obat" name="polaMakan" required>
-					</div>
-					<div class="form-group">
-						<label>Deskripsi :</label>
-						<input type="text" class="form-control" placeholder="Silahkan pilih bentuk obat" name="deskripsi" required>
+					<div class="form-group row">
+						<div class="col-md-4">
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Pola Makan</label>
+									<input type="text" class="form-control" placeholder="Silahkan masukan pola makan" name="polaMakan" required>
+								</div>
+								<div class="col-lg-6 mt-1 mt-lg-4 align-self-center">
+									<span class="text-muted">X sehari</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8">
+							<label>Deskripsi :</label>
+							<input type="text" class="form-control" placeholder="Masukan deskripsi obat" name="deskripsi" required>
+						</div>
 					</div>
 					<div class="text-right">
-						<button class="btn btn-warning" action="{{ URL::to('/obat') }}">Back</button>
+						<a class="btn btn-warning" href="{{ URL::to('/obat') }}"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back</a>
 						<button type="submit" class="btn btn-primary">Submit<i class="icon-paperplane ml-2"></i></button>
 					</div>
 				</form>

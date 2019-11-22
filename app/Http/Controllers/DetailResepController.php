@@ -10,9 +10,15 @@ use App\DetailObat;
 use Session;
 use DB;
 use URL;
+use response;
 
 class DetailResepController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -36,10 +42,10 @@ class DetailResepController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="'.route('detailResep.destroy',$data->detail_resep_id).'">
                                 '.csrf_field().'
-                                <a href="'.URL::to('/resep/' . $data->resep_id . '/detailResep/'.$data->detail_resep_id.'/detailObat').'" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Detail</a>
-                                <a href="' .URL::to('/detailResep/' . $data->detail_resep_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="'.URL::to('/resep/' . $data->resep_id . '/detailResep/'.$data->detail_resep_id.'/detailObat').'" class="btn btn-sm btn-success"><i class="fas fa-book mr-1"></i> Detail</a>
+                                <a href="' .URL::to('/detailResep/' . $data->detail_resep_id . '/edit'). '" class="btn btn-sm btn-warning"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <input name="_method" type="hidden" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" ><i class="far fa-trash-alt mr-1"></i>   Delete</button>
                             </form>';
                 return $button;
             })
@@ -82,21 +88,28 @@ class DetailResepController extends Controller
             'jumlahKaliMinum' => 'required'
         ]);
 
-        $id = $request->resepId;
-        $detailResep = new DetailResep;
-        $detailResep->resep_id = $request->resepId;
-        $detailResep->obat_id = $request->namaObat;
-        $detailResep->dosis = $request->dosis;
-        $detailResep->aturan_pakai = $request->aturanPakai;
-        $detailResep->takaran_minum = $request->takaranMinum;
-        $detailResep->bentuk_obat = $request->bentukObat;
-        $detailResep->waktu_minum = $request->waktuMinum;
-        $detailResep->keterangan = $request->keterangan;
-        $detailResep->jumlah_obat = $request->jumlahObat;
-        $detailResep->jumlah_kali_minum = $request->jumlahKaliMinum;
-        $detailResep->save();
+        DB::beginTransaction();
+        try {
+            $id = $request->resepId;
+            $detailResep = new DetailResep;
+            $detailResep->resep_id = $request->resepId;
+            $detailResep->obat_id = $request->namaObat;
+            $detailResep->dosis = $request->dosis;
+            $detailResep->aturan_pakai = $request->aturanPakai;
+            $detailResep->takaran_minum = $request->takaranMinum;
+            $detailResep->bentuk_obat = $request->bentukObat;
+            $detailResep->waktu_minum = $request->waktuMinum;
+            $detailResep->keterangan = $request->keterangan;
+            $detailResep->jumlah_obat = $request->jumlahObat;
+            $detailResep->jumlah_kali_minum = $request->jumlahKaliMinum;
+            $detailResep->save();
+            DB::commit();
 
-        return redirect()->route('detailResep',$id)->with('success','resep berhasil ditambahkan');
+            return redirect()->route('detailResep',$id)->with('success','resep berhasil ditambahkan');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('detailResep',$id)->with('error','Ada sesuatu yang tidak beres silahkan hubungi pengembang');
+        }
     }
 
     /**
@@ -158,21 +171,30 @@ class DetailResepController extends Controller
             'jumlahKaliMinum' => 'required'
         ]);
 
-        // $id = $request->resepId;
-        $detailResep = DetailResep::findOrFail($id);
-        $resepId = $detailResep->resep_id;
-        $detailResep->obat_id = $request->namaObat;
-        $detailResep->dosis = $request->dosis;
-        $detailResep->aturan_pakai = $request->aturanPakai;
-        $detailResep->takaran_minum = $request->takaranMinum;
-        $detailResep->bentuk_obat = $request->bentukObat;
-        $detailResep->waktu_minum = $request->waktuMinum;
-        $detailResep->keterangan = $request->keterangan;
-        $detailResep->jumlah_obat = $request->jumlahObat;
-        $detailResep->jumlah_kali_minum = $request->jumlahKaliMinum;
-        $detailResep->save();
 
-        return redirect()->route('detailResep',$resepId)->with('success','resep berhasil diubah');
+        DB::beginTransaction();
+        try {
+            $detailResep = DetailResep::findOrFail($id);
+            $resepId = $detailResep->resep_id;
+            $detailResep->obat_id = $request->namaObat;
+            $detailResep->dosis = $request->dosis;
+            $detailResep->aturan_pakai = $request->aturanPakai;
+            $detailResep->takaran_minum = $request->takaranMinum;
+            $detailResep->bentuk_obat = $request->bentukObat;
+            $detailResep->waktu_minum = $request->waktuMinum;
+            $detailResep->keterangan = $request->keterangan;
+            $detailResep->jumlah_obat = $request->jumlahObat;
+            $detailResep->jumlah_kali_minum = $request->jumlahKaliMinum;
+            $detailResep->save();
+            DB::commit();
+
+            return redirect()->route('detailResep',$resepId)->with('success','resep berhasil diubah');    
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Ada sesuatu yang tidak beres silahkan hubungi pengembang');
+        }
+        // $id = $request->resepId;
+        
     }
 
     /**
@@ -183,10 +205,28 @@ class DetailResepController extends Controller
      */
     public function destroy($id)
     {
-        $detailResep = DetailResep::findOrFail($id);
-        // return $detailResep;
-        $detailResep->delete();
-        return redirect()->back()->with('success','Obat pada resep berhasil dihapus');
+        DB::beginTransaction();
+        try {
+            $detailResep = DetailResep::findOrFail($id);
+            $detailResep->delete();
+            DB::commit();
+            return redirect()->back()->with('success','Obat pada resep berhasil dihapus');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Ada yang tidak beres silahkan hubungi pengembang');
+        }
+    }
+
+    public function autoCompleteObat(Request $request)
+    {
+        // return $request->get('param');
+        $param = $request->get('term');
+        // return $param;
+        $data  = Obat::with('detailObat')
+                ->where('name','LIKE','%'.$param.'%')
+                ->get();
+
+        return response()->json($data);
     }
 
     public function detail($resepId,$detailObatId)
