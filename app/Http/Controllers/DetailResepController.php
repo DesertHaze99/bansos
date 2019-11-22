@@ -11,6 +11,7 @@ use Session;
 use DB;
 use URL;
 use response;
+use PDF;
 
 class DetailResepController extends Controller
 {
@@ -253,12 +254,16 @@ class DetailResepController extends Controller
             ->where('resep_id',$id)
             ->first();
 
-        //return $resep;
+        // return $resep;
         
         \QrCode::size(500)
 			  ->format('png')
 			  ->generate('resep', public_path('images/qrcode.png'));
-	  
-	    return view('qrcode')->with(['resep' => $resep]);
+        
+        $customPaper = array(0,0,100,200);
+        $resepPdf = PDF::loadView('qrcode',compact('resep'))->setPaper($customPaper,'landscape');
+
+	    return $resepPdf->stream(); 
+	    // return view('qrcode')->with(['resep' => $resep]);
     }
 }

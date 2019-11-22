@@ -158,9 +158,7 @@
 	        		</div>
 	        		<div class="col-md-6">
 	        			<div class="text-right">
-							<form action="{{ URL::to('/resep/'.$info->resep_id.'/qr')}}">
-								<button class="btn btn-success" type="submit"/><i class="fas fa-print mr-2"></i>Print resep</button>
-							</form>
+							<a class="btn btn-success" href="{{ URL::to('/resep/'.$info->resep_id.'/qr')}}"/><i class="fas fa-print mr-2"></i>Print resep</a>
 			        	</div>
 	        		</div>
 	        	</div>

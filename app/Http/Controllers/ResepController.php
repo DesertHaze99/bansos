@@ -223,8 +223,4 @@ class ResepController extends Controller
 
         return $obat;
     }
-    
-
-
-
 }
