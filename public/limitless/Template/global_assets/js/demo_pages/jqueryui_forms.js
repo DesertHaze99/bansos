@@ -295,8 +295,10 @@ var JqueryUiForms = function() {
                 return false;
             }
         })
-        .autocomplete('instance')._renderItem = function(ul, item) {
-            return $('<li>').append('<span class="font-weight-semibold pb-0">' + item.label + '</span>' + '<div class="text-muted font-size-sm pt-0">' + item.desc + '</div>').appendTo(ul);
+        .data('autocomplete')._renderItem = function(ul, item) {
+            return $('<li>')
+            .append('<span class="font-weight-semibold pb-0">' + item.label + '</span>' + '<div class="text-muted font-size-sm pt-0">' + item.desc + '</div>')
+            .appendTo(ul);
         };
 
 
@@ -362,7 +364,7 @@ var JqueryUiForms = function() {
                 $(this).parent().addClass('ui-autocomplete-processing');
             },
             open: function() {
-                $(this).parent().removeClass('ui-autocomplete-processing');
+                $(this).parent().removeClass('ui-autocomplete-processing'); 
             }
         });
 

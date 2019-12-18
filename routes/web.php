@@ -54,4 +54,3 @@ Route::post('detailObatAjax','ResepController@detailObatAjax');
 Route::get('autoCompleteObat','DetailResepController@autoCompleteObat')->name('autoCompleteObat');
 
 Route::resource('detailResep','DetailResepController');
-

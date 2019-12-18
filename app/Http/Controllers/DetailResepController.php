@@ -12,6 +12,8 @@ use DB;
 use URL;
 use response;
 use PDF;
+use QrCode;
+use Carbon\Carbon;
 
 class DetailResepController extends Controller
 {
@@ -253,17 +255,17 @@ class DetailResepController extends Controller
         },'pasien'])
             ->where('resep_id',$id)
             ->first();
-
-        // return $resep;
         
-        \QrCode::size(500)
-			  ->format('png')
-			  ->generate('resep', public_path('images/qrcode.png'));
+        $pdfname = 'resep_obat_'.$resep->resep_id;
+        \QrCode::size(100)
+              ->format('png')
+              ->generate('<h1> PASIEN :'.$resep->pasien->nama.'</h1> <h1>Link : http://localhost:8000/resep/13/qr </h1>', public_path('images/qrcode/'.$pdfname.'.png'));
         
-        $customPaper = array(0,0,100,200);
-        $resepPdf = PDF::loadView('qrcode',compact('resep'))->setPaper($customPaper,'landscape');
+        $customPaper = array(0,0,180,300);
+        $resepPdf = PDF::loadView('mumut',compact('resep','pdfname'))->setPaper($customPaper,'landscape');
 
-	    return $resepPdf->stream(); 
-	    // return view('qrcode')->with(['resep' => $resep]);
+        // return view('mumut',compact('resep','pdfname'));
+        return $resepPdf->download($pdfname); 
+        // return view('qrcode')->with(['resep' => $resep]);
     }
 }

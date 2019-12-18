@@ -237,7 +237,7 @@
 				</div>
 			</div>
 			<div class="card-footer text-left">
-				<a href="{{ URL::to('/resep/'.$resep->resep_id.'/detailResep')}}" type="button" class="btn btn-primary">Back</a>				
+				<a href="{{ URL::to('/resep/'.$resep->resep_id.'/detailResep')}}" type="button" class="btn btn-primary">Back</a>
 			</div>
 		</div>
 	@endsection

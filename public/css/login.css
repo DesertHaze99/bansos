@@ -1,0 +1,85 @@
+.login-page{
+    background-image: url('../images/Artboard.jpeg');
+    height: 100vh;
+    background-size: cover;
+}
+.title-apotech {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+}
+
+.copyright-apotech {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.title-copyright {
+    font-size: 8px;
+    bottom: 90px;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    position: absolute;
+    color: #fff;
+    letter-spacing: 1px;
+}
+.title-big {
+    font-size: 18px;
+    top: 90px;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    position: absolute;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.title-small {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color:#fff;
+    /* display: none; */
+}
+
+.login-content-kanan{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center 
+}
+.login-content-kiri{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center 
+}
+.kanan-content {
+    width: 300px;
+}
+
+.login-form-apotech {
+    border-radius: 20px;
+}
+
+.display-in-small{
+    display: none;
+}
+@media screen and (max-width: 600px) {
+    .login-content-kiri{
+        display: none;
+    }
+    .kanan-content {
+        width: 300px;
+    }
+    .title-big {
+        display: none;
+    }
+    .copyright-apotech {
+        display: none;
+    }
+    .display-in-small{
+        display: block;
+    }
+    .display-in-small img{
+        margin-bottom: 50px;
+    }
+}

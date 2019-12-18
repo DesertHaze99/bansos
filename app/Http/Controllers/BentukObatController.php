@@ -29,7 +29,6 @@ class BentukObatController extends Controller
     public function bentukObatAjax()
     {
         $data = BentukObat::all();
-        $listKategori ='';
         // return $data;
         return datatables()->of($data)
             ->addColumn('action',function($data){
