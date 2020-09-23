@@ -177,10 +177,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
-
     ],
 
     /*
@@ -233,9 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Image' => Intervention\Image\Fcades\Image::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,   
+        
     ],
 
 ];

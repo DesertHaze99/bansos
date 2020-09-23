@@ -10,47 +10,64 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/','DashboardController@index');
-
-Route::resource('obat','ObatController');
-Route::post('obatExcel','ObatController@storeExcel')->name('storeExcel');
-Route::get('/obatAjax','ObatController@obatAjax');
-Route::post('detailObat','ObatController@detailObat');
-
-Route::resource('interaksi', 'InteraksiController');
-Route::get('/interaksiAjax','InteraksiController@InteraksiAjax');
-
 Auth::routes();
 
-Route::resource('bentukObat','BentukObatController');
-Route::get('/bentukObatAjax','BentukObatController@bentukObatAjax');
+Route::get('/','LandingController@index');
+Route::post('/pengaduan', 'LandingController@tambahPengaduan')->name('tambahPengaduan');
 
-Route::resource('merkDagang','MerkDagangController');
-Route::get('/merekDagangAjax','MerkDagangController@merekDagangAjax');
 
-Route::resource('dosis','DosisController');
-Route::get('/dosisAjax','DosisController@dosisAjax');
+Route::get('/admin','AdminController@index');
 
-Route::resource('kontraindikasi','KontraindikasiController');
-Route::get('/kontraindikasiAjax','KontraindikasiController@kontraindikasiAjax');
 
-Route::resource('pasien','PasienController');
-Route::get('/pasienAjax','PasienController@pasienAjax');
+Route::get('/admin/penduduk','PendudukController@index');
+Route::get('/pendudukAJAX','PendudukController@pendudukAJAX');
+Route::post('/fetchKabupaten', 'PendudukController@fetchKabupaten')->name('fecthKabupaten');
+Route::get('/admin/penduduk-propinsi', 'PendudukController@dataKAB');
+Route::get('/admin/penduduk-kabupaten', 'PendudukController@dataKEC');
+Route::get('/admin/penduduk-kecamatan', 'PendudukController@dataDESA');
+Route::post('/admin/tambahPenduduk', 'PendudukController@tambahPenduduk')->name('tambahPenduduk');
+Route::post('/admin/editPenduduk{IDBDT}', 'PendudukController@editPenduduk')->name('editPenduduk');
 
-Route::resource('resep','ResepController');
-Route::get('resepAjax','ResepController@resepAjax');
-Route::post('pasienForResep','ResepController@pasienForResep')->name('pasienForResep');
-Route::get('/pasienResepAjax','ResepController@pasienResepAjax');
-Route::prefix('resep')->group(function(){
-	Route::post('show', 'ResepController@show');
-	Route::get('{id}/detailResep','ResepController@detailResep')->name('detailResep');
-	Route::get('{id}/qr','DetailResepController@qrcode')->name('printResep');
-	Route::get('{id}/laporan-pdf','DetailResepController@generatePDF');
-	Route::get('{id}/detailResepAjax','DetailResepController@detailResepAjax');
-	Route::get('{resepId}/detailResep/{detailObatId}/detailObat','DetailResepController@detail');
-});
-Route::post('detailObatAjax','ResepController@detailObatAjax');
-Route::get('autoCompleteObat','DetailResepController@autoCompleteObat')->name('autoCompleteObat');
 
-Route::resource('detailResep','DetailResepController');
+Route::get('/admin/penerima','PenerimaBantuanController@index');
+Route::get('/penerimaAJAX','PenerimaBantuanController@penerimaAJAX');
+Route::get('/admin/penerimaSembako','PenerimaBantuanController@sembako');
+Route::get('/penerimaSembakoAJAX','PenerimaBantuanController@penerimaSembakoAJAX');
+Route::get('/admin/penerimaRaskin','PenerimaBantuanController@raskin');
+Route::get('/penerimaRaskinAJAX','PenerimaBantuanController@penerimaRaskinAJAX');
+Route::get('/admin/penerimaBLT','PenerimaBantuanController@blt');
+Route::get('/penerimaBLTAJAX','PenerimaBantuanController@penerimaBLTAJAX');
+Route::get('/admin/penerimaPNPMM','PenerimaBantuanController@pnpmm');
+Route::get('/penerimaPNPMMAJAX','PenerimaBantuanController@penerimaPNPMMAJAX');
+Route::get('/admin/verifikasi','PenerimaBantuanController@verifikasi');
+Route::get('/verifikasiAJAX','PenerimaBantuanController@verifikasiAJAX');
+Route::get('search', 'PenerimaBantuanController@search')->name('search');
+Route::get('dataAutosearch', 'PenerimaBantuanController@dataAutosearch')->name('dataAutosearch');
+Route::post('/admin/tambahPenerimaBantuan', 'PenerimaBantuanController@tambahPenerimaBantuan')->name('tambahPenerimaBantuan');
+Route::post('/admin/editBantuan{id_mapping}', 'PenerimaBantuanController@editBantuan')->name('editBantuan');
+
+Route::get('/admin/pengaduan','PengaduanController@index');
+Route::get('/pengaduanAJAX','PengaduanController@pengaduanAJAX');
+Route::post('/admin/verifikasiPengaduan{id_pengaduan}', 'PengaduanController@verifikasiPengaduan')->name('verifikasiPengaduan');
+
+Route::get('/admin/parameter/agama','AgamaController@index');
+Route::get('/agamaAJAX','AgamaController@agamaAJAX');
+Route::post('/admin/editAgama{id_agama}', 'AgamaController@editAgama')->name('editAgama');
+Route::post('/admin/tambahAgama', 'AgamaController@tambahAgama')->name('tambahAgama');
+
+
+Route::get('/admin/parameter/jenis_bantuan','JenisBantuanController@index');
+Route::get('/jenisBantuanAJAX','JenisBantuanController@jenisBantuanAJAX');
+Route::post('/admin/editJenisBantuan{id_bantuan}', 'JenisBantuanController@editJenisBantuan')->name('editJenisBantuan');
+Route::post('/admin/tambahJenisBantuan', 'JenisBantuanController@tambahJenisBantuan')->name('tambahJenisBantuan');
+
+
+Route::get('/admin/parameter/golongan','GolonganController@index');
+Route::get('/golonganAJAX','GolonganController@golonganAJAX');
+Route::post('/admin/editGolongan{id_golongan}', 'GolonganController@editGolongan')->name('editGolongan');
+Route::post('/admin/tambahGolongan', 'GolonganController@tambahGolongan')->name('tambahGolongan');
+
+Route::get('/admin/artikel','ArtikelController@index');
+Route::get('/artikelAJAX','ArtikelController@artikelAJAX');
+Route::post('/admin/tambahArtikel', 'ArtikelController@store')->name('tambahArtikel');
+Route::post('/admin/editArtikel{id_artikel}', 'ArtikelController@editArtikel')->name('editArtikel');
